@@ -1,0 +1,39 @@
+project:
+  name: "NLP Sentiment Analysis and Rating Prediction"
+  version: "1.0.0"
+
+data:
+  raw_data_path: "data/raw/reviews.csv"
+  processed_data_path: "data/processed/cleaned_reviews.csv"
+  text_column: "review_text"
+  rating_column: "rating"
+  sentiment_column: "sentiment"
+
+preprocessing:
+  lowercase: true
+  remove_punctuation: true
+  remove_numbers: false
+  remove_stopwords: true
+  lemmatization: true
+
+features:
+  count_vectorizer:
+    max_features: 5000
+    ngram_range: [1, 2]
+
+  tfidf_vectorizer:
+    max_features: 5000
+    ngram_range: [1, 2]
+
+model:
+  test_size: 0.2
+  random_state: 42
+
+models_to_train:
+  - naive_bayes
+  - logistic_regression
+
+outputs:
+  model_dir: "models"
+  figures_dir: "reports/figures"
+  results_path: "reports/model_results.csv"
