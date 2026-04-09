@@ -9,3 +9,4 @@ joblib
 jupyter
 ipykernel
 kaggle
+google-play-scraper
