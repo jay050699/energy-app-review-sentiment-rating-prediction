@@ -1,0 +1,122 @@
+================================================================================
+Loading sample dataset
+================================================================================
+Dataset shape: (100, 8)
+
+Columns:
+['app_name', 'app_id', 'category', 'review_text', 'rating', 'review_date', 'thumbs_up_count', 'app_version']
+
+First 5 rows:
+               app_name  ...                                        review_text
+0  Octopus Electroverse  ...  Good app, but why does the map always default ...
+1  Octopus Electroverse  ...                                          fantastic
+2  Octopus Electroverse  ...  I'll be honest and say when I decided to go fo...
+3  Octopus Electroverse  ...  The app seems fine, and the support is excelle...
+4  Octopus Electroverse  ...  Very easy and fast to use also it covers a wid...
+
+[5 rows x 4 columns]
+
+================================================================================
+Missing values
+================================================================================
+app_name           0
+app_id             0
+category           0
+review_text        0
+rating             0
+review_date        0
+thumbs_up_count    0
+app_version        8
+dtype: int64
+
+================================================================================
+Review count by app
+================================================================================
+app_name
+Octopus Electroverse    20
+E.ON Next Home          20
+E.ON Myline             20
+Shell                   20
+PlugShare               20
+Name: count, dtype: int64
+
+================================================================================
+Rating distribution
+================================================================================
+rating
+1    37
+2     5
+3     5
+4    10
+5    43
+Name: count, dtype: int64
+
+================================================================================
+Rating distribution by app
+================================================================================
+rating                 1  2  3  4   5
+app_name                             
+E.ON Myline           10  4  1  1   4
+E.ON Next Home        13  0  0  0   7
+Octopus Electroverse   2  0  4  3  11
+PlugShare              5  1  0  1  13
+Shell                  7  0  0  5   8
+
+================================================================================
+Duplicate review check
+================================================================================
+Duplicate reviews based on app_name + review_text: 0
+
+================================================================================
+Review length analysis
+================================================================================
+
+Character count summary:
+count    100.000000
+mean     126.570000
+std      131.667492
+min        1.000000
+25%       32.750000
+50%       76.000000
+75%      161.000000
+max      500.000000
+Name: char_count, dtype: float64
+
+Word count summary:
+count    100.000000
+mean      23.600000
+std       24.117557
+min        1.000000
+25%        5.750000
+50%       14.000000
+75%       31.500000
+max       93.000000
+Name: word_count, dtype: float64
+
+Reviews with fewer than 3 words: 13
+
+================================================================================
+Average review length by app
+================================================================================
+                      char_count  word_count
+app_name                                    
+E.ON Myline               198.75       36.05
+Octopus Electroverse      143.00       27.65
+E.ON Next Home            125.60       23.60
+Shell                      89.35       16.80
+PlugShare                  76.15       13.90
+
+================================================================================
+Sample reviews from each app
+================================================================================
+
+--------------------------------------------------------------------------------
+App: Octopus Electroverse
+--------------------------------------------------------------------------------
+Rating: 4
+Review: Good app, but why does the map always default to Charing Cross? It would be better if there were choices - default/home/or last used.
+
+Rating: 5
+Review: fantastic
+
+Rating: 5
