@@ -1,9 +1,10 @@
-# NLP Sentiment Analysis and Rating Prediction
+# Energy App Review Sentiment Analysis and Rating Prediction
 
 ## Project Overview
 
-This project focuses on text analytics using customer review data. The goal is to build an end-to-end NLP machine learning pipeline that can analyze review text and predict sentiment or rating.
+This project focuses on text analytics using public customer reviews from energy-sector mobile applications. The goal is to build an end-to-end NLP machine learning pipeline that can analyze review text, classify sentiment, and predict app review ratings.
 
+The selected dataset includes reviews from energy supplier apps, EV charging apps, mobility apps, and smart energy service apps.
 The project includes:
 
 - Text data loading

@@ -1,0 +1,9 @@
+app_name,review_count,average_rating,average_word_count,min_word_count,max_word_count
+Hive,500,2.108,31.344,1,107
+E.ON Next Home,103,2.3300970873786406,29.718446601941746,1,95
+Vattenfall InCharge,89,2.168539325842697,29.280898876404493,1,171
+Octopus Electroverse,500,3.834,25.726,1,99
+ScottishPower,500,2.882,19.468,1,102
+E.ON Myline,500,2.218,19.22,1,91
+PlugShare,500,4.016,16.372,1,100
+Shell,500,3.476,15.532,1,99
