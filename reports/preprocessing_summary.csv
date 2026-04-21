@@ -1,0 +1,8 @@
+metric,value
+raw_rows,3192
+processed_rows,3070
+duplicates_removed,103
+empty_clean_text_rows_removed,19
+negative_reviews,1439
+neutral_reviews,220
+positive_reviews,1411
