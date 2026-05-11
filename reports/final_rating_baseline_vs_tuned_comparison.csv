@@ -1,0 +1,4 @@
+stage,selection_criterion,model_name,accuracy,macro_f1,weighted_f1,mean_absolute_error,best_params,comment
+Baseline,Best Accuracy,CountVectorizer + Naive Bayes,0.684,0.3958,0.6399,0.7394,Default / baseline settings,Best exact star-rating accuracy before tuning.
+Baseline,Best Macro F1,TF-IDF + Logistic Regression,0.5977,0.4003,0.6172,0.7329,Default / baseline settings,Most balanced baseline model across the five rating classes.
+Tuned,Best Macro F1,CountVectorizer + Logistic Regression,0.6466,0.4302,0.6426,0.7296,"{'model__C': 1.0, 'model__class_weight': 'balanced'}",Selected as final tuned rating model based on macro F1.
