@@ -93,3 +93,17 @@ The final project will include:
 - Evaluation results
 - Confusion matrix plots
 - README documentation
+
+
+
+# Final Project Conclusion
+
+This project developed an end-to-end NLP pipeline for analyzing customer reviews from energy-sector mobile applications.
+
+The sentiment classification task showed strong performance for positive and negative reviews. The final tuned sentiment model, CountVectorizer + Naive Bayes with alpha = 0.5, achieved an accuracy of 0.8013 and a macro F1-score of 0.6203.
+
+The rating prediction task was more challenging because the model had to predict exact 1-to-5 star ratings. The final tuned rating model, CountVectorizer + Logistic Regression with balanced class weights, achieved an accuracy of 0.6466, macro F1-score of 0.4302, and Mean Absolute Error of 0.7296.
+
+The results show that sentiment classification is more reliable than exact rating prediction for this dataset. This is mainly because public app reviews are highly polarized, with many 1-star and 5-star reviews and fewer middle-rating examples.
+
+Overall, the project demonstrates how classical NLP and machine learning methods can be used to analyze energy-sector customer feedback, identify common satisfaction and complaint patterns, and support customer experience monitoring.
