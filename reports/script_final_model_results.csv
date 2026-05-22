@@ -1,0 +1,3 @@
+model_name,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,mean_absolute_error
+Final Sentiment Model - CountVectorizer + Naive Bayes,0.8013029315960912,0.6560537439613526,0.6136923311125438,0.6203035590769037,0.7877943255743646,
+Final Rating Model - CountVectorizer + Logistic Regression,0.6465798045602605,0.4319750168963581,0.429272920471675,0.43023049086122817,0.6426266951580445,0.7296416938110749
