@@ -9,11 +9,12 @@ from nltk.stem import WordNetLemmatizer
 def download_nltk_resources():
     """
     Download required NLTK resources if they are not already available.
+    The quiet=True argument keeps script output clean.
     """
 
-    nltk.download("stopwords")
-    nltk.download("wordnet")
-    nltk.download("omw-1.4")
+    nltk.download("stopwords", quiet=True)
+    nltk.download("wordnet", quiet=True)
+    nltk.download("omw-1.4", quiet=True)
 
 
 def map_rating_to_sentiment(rating):
