@@ -307,20 +307,49 @@ source .venv/bin/activate
 
 pip install -r requirements.txt
 
+This creates the raw dataset locally:
 
-### 4. Collect reviews
+data/raw/energy_app_reviews_raw.csv
+
+
+### 4. Collect public Google Play reviews
 
 python src/collect_reviews.py
 
 
-### 5. Preprocess data
+### 5. Preprocess the review dataset
 
 python src/preprocessing.py
 
+This creates the cleaned dataset locally:
 
-### 6. Run notebooks
+data/processed/energy_app_reviews_cleaned.csv
 
-Run the notebooks in this order:
+
+### 6. Train final models using reusable scripts
+
+python src/train.py
+
+This trains and saves:
+
+models/final_sentiment_model.pkl
+models/final_rating_model.pkl
+
+
+### 7. Run prediction demo
+
+Run default example predictions:
+
+python src/predict.py
+
+Run prediction on custom review text:
+
+python src/predict.py --text "Write a review here"
+
+
+### 8. Run Notebooks
+
+The notebooks can be run in this order:
 
 01_data_exploration.ipynb
 02_text_preprocessing.ipynb
