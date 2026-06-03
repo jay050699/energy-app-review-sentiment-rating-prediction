@@ -1,8 +1,8 @@
 metric,value
-raw_rows,3192
-processed_rows,3070
-duplicates_removed,103
-empty_clean_text_rows_removed,19
-negative_reviews,1439
-neutral_reviews,220
-positive_reviews,1411
+raw_rows,3201
+processed_rows,3084
+duplicates_removed,100
+empty_clean_text_rows_removed,17
+negative_reviews,1440
+neutral_reviews,208
+positive_reviews,1436
