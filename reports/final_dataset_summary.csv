@@ -2,7 +2,7 @@ app_name,review_count,average_rating,average_word_count,min_word_count,max_word_
 E.ON Myline,500,2.21,19.302,1,91
 Hive,500,2.15,29.742,1,107
 Octopus Electroverse,500,3.838,25.796,1,99
-PlugShare,500,4.006,16.604,1,100
+PlugShare,500,4.008,16.55,1,100
 Shell,500,3.43,16.468,1,99
 ScottishPower,500,2.994,19.964,1,102
 E.ON Next Home,111,2.27027027027027,29.25225225225225,1,95
