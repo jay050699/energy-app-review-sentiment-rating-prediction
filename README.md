@@ -4,9 +4,11 @@
 
 This project builds an end-to-end Natural Language Processing and Machine Learning pipeline to analyze public customer reviews from energy-sector mobile applications.
 
-The dataset contains Google Play Store reviews from energy supplier apps, EV charging apps, energy mobility apps, and smart home energy services. The goal is to classify customer sentiment and predict star ratings based on review text.
+The dataset contains Google Play Store reviews from energy supplier apps, EV charging apps, mobility apps, and smart home energy services. The goal is to classify customer sentiment and predict star ratings based on review text.
 
 The project is designed as a practical text analytics workflow for understanding customer feedback patterns in the energy sector.
+
+---
 
 ## Business Motivation
 
@@ -16,29 +18,29 @@ Public app reviews contain useful feedback about customer satisfaction, usabilit
 
 This project shows how NLP can be used to extract insights from unstructured review text and support customer experience monitoring.
 
+---
+
 ## Dataset
 
 The dataset was collected from public Google Play Store reviews using the `google-play-scraper` Python package.
 
-The final cleaned dataset contains:
+After preprocessing, the dataset used for training and evaluation contained:
 
- Metric                     Value 
- -------------------------  ----- 
- Total reviews              3,070 
- Number of apps                 8 
- Average rating              2.97 
- Average review word count  22.57 
- Positive reviews           1,411 
- Negative reviews           1,439 
- Neutral reviews              220 
+| Metric                    | Value |
+|                           |       |
+| Total reviews             | 3,070 |
+| Number of apps            |     8 |
+| Average rating            |  2.97 |
+| Average review word count | 22.57 |
+| Positive reviews          | 1,411 |
+| Negative reviews          | 1,439 |
+| Neutral reviews           |   220 |
 
-## Selected App Categories
+---
 
-The dataset includes reviews from apps related to:
+## Selected Apps
 
-* Energy supplier digital services
-* EV charging and mobility
-* Smart energy and home energy services
+The dataset includes reviews from apps related to energy supplier services, EV charging, energy mobility, and smart home energy.
 
 Example apps include:
 
@@ -51,6 +53,8 @@ Example apps include:
 * Hive
 * Vattenfall InCharge
 
+---
+
 ## Project Tasks
 
 This project contains two machine learning tasks.
@@ -59,19 +63,23 @@ This project contains two machine learning tasks.
 
 The original 1-to-5 star ratings were mapped into three sentiment classes:
 
- Rating  Sentiment 
- ------  --------- 
- 1, 2    Negative  
- 3       Neutral   
- 4, 5    Positive  
+| Rating | Sentiment |  
+
+| 1, 2   | Negative  |
+| 3      | Neutral   |
+| 4, 5   | Positive  |
 
 ### 2. Rating Prediction
 
 The second task predicts the original star rating:
 
+```text
 1, 2, 3, 4, or 5 stars
+```
 
 Rating prediction is more difficult than sentiment classification because the model must distinguish between five rating levels instead of three sentiment classes.
+
+---
 
 ## Project Workflow
 
@@ -90,6 +98,9 @@ The project follows this end-to-end workflow:
 11. Tune rating prediction models
 12. Compare model results
 13. Save evaluation reports and visualizations
+14. Create reusable training and prediction scripts
+
+---
 
 ## Text Preprocessing
 
@@ -101,34 +112,36 @@ The review text was cleaned using the following steps:
 * Extra whitespace removal
 * Stopword removal
 * Lemmatization
-* Short empty-text filtering
 * Duplicate review removal
+* Empty cleaned-text filtering
 
 Both the original review text and cleaned review text were preserved.
 
+---
+
 ## Feature Extraction
 
-Two classical NLP feature extraction methods were used:
+Two classical NLP feature extraction methods were used.
 
 ### CountVectorizer
 
-CountVectorizer converts text into word and phrase count features.
-
-It is simple, interpretable, and works well as a baseline for text classification tasks.
+CountVectorizer converts text into word and phrase count features. It is simple, interpretable, and works well as a baseline for text classification tasks.
 
 ### TF-IDF Vectorizer
 
-TF-IDF gives higher importance to terms that are frequent in a review but not too common across all reviews.
-
-It is commonly used with linear models such as Logistic Regression.
+TF-IDF gives higher importance to terms that are frequent in a review but not too common across all reviews. It is commonly used with linear models such as Logistic Regression.
 
 Both methods used unigrams and bigrams to capture words and short phrases such as:
 
+```text
 charging station
 not working
 customer service
 easy use
 payment issue
+```
+
+---
 
 ## Models Used
 
@@ -139,18 +152,56 @@ The project compares the following classical machine learning models:
 
 Model pipelines combine text vectorization and classification in a single reusable workflow.
 
+---
+
+## Exploratory Data Analysis Insights
+
+The review dataset showed strong polarization between positive and negative feedback.
+
+Common positive terms included:
+
+```text
+easy
+good
+great
+charging
+charger
+work
+service
+excellent
+```
+
+Common negative terms included:
+
+```text
+work
+update
+time
+charging
+useless
+card
+issue
+account
+```
+
+Negative reviews often contained more detailed explanations of technical problems, login issues, payment failures, or charging difficulties.
+
+---
+
 ## Sentiment Classification Results
 
 The final sentiment model was selected after comparing baseline and tuned models.
 
-  Stage     Model                          Accuracy  Macro F1  Weighted F1  Parameters                
-  --------  -----------------------------  --------  --------  -----------  ------------------------- 
-  Baseline  CountVectorizer + Naive Bayes    0.8062    0.5960       0.7855  Default baseline settings 
-  Tuned     CountVectorizer + Naive Bayes    0.8013    0.6203       0.7878  alpha = 0.5               
+The final sentiment model was selected after comparing the baseline and tuned models.
 
-The tuned CountVectorizer + Naive Bayes model was selected as the final sentiment model because it achieved the best macro F1-score.
+|  Stage   |            Model              | Accuracy | Macro F1 | Weighted F1 |
+|          |                               |          |          |             |
+| Baseline | CountVectorizer + Naive Bayes | 0.8062   | 0.5960   | 0.7855      |
+| Tuned    | CountVectorizer + Naive Bayes | 0.8013   | 0.6203   | 0.7878      |
 
-Although the baseline model had slightly higher accuracy, the tuned model performed better when considering all sentiment classes more equally.
+Although the baseline model had slightly higher accuracy, the tuned model was selected because it achieved better Macro F1 and Weighted F1 scores. This indicates better overall balance across sentiment classes.
+
+---
 
 ## Sentiment Model Interpretation
 
@@ -160,18 +211,26 @@ The neutral class remains harder to classify because it has fewer examples and o
 
 This is a realistic result for public app review data, where users often leave reviews after very positive or very negative experiences.
 
+---
+
 ## Rating Prediction Results
 
-Rating prediction was treated as a secondary task because exact 1-to-5 star prediction is more difficult than sentiment classification.
+The final rating prediction model was selected after comparing baseline and tuned models.
 
-  Stage     Model                                  Accuracy  Macro F1  Weighted F1     MAE  Parameters                       
-  --------  -------------------------------------  --------  --------  -----------  ------  -------------------------------- 
-  Baseline  CountVectorizer + Naive Bayes            0.6840    0.3958       0.6399  0.7394  Default baseline settings        
-  Tuned     CountVectorizer + Logistic Regression    0.6466    0.4302       0.6426  0.7296  C = 1.0, class_weight = balanced 
+|  Stage   |                Model                  | Accuracy | Macro F1  | Weighted F1 |  MAE   |
+|          |                                       |          |           |             |        |
+| Baseline | CountVectorizer + Naive Bayes         | 0.6840   |  0.3958   |   0.6399    | 0.7394 |
+| Tuned    | CountVectorizer + Logistic Regression | 0.6466   |  0.4302   |   0.6426    | 0.7296 |
 
-The tuned CountVectorizer + Logistic Regression model was selected as the final rating model because it achieved a better macro F1-score and slightly lower Mean Absolute Error.
+Tuned model parameters:
 
-The baseline Naive Bayes model achieved higher exact accuracy, but it mainly performed well on the dominant 1-star and 5-star classes.
+- Model: Logistic Regression
+- C: 1.0
+- Class weight: balanced
+
+Although the baseline model achieved higher accuracy, the tuned Logistic Regression model was selected because it improved Macro F1, Weighted F1, and MAE. This means the tuned model gave more balanced predictions across rating classes and slightly reduced the average prediction error.
+
+---
 
 ## Rating Model Interpretation
 
@@ -183,33 +242,19 @@ Because of this, the models perform best on extreme ratings and struggle with mi
 
 Mean Absolute Error was included because ratings are ordered. Predicting 4 instead of 5 is a smaller error than predicting 1 instead of 5.
 
-## Key Insights from EDA
+---
 
-The review dataset showed strong polarization between positive and negative feedback.
+## Final Conclusion
 
-Common positive terms included:
+This project demonstrates a complete NLP pipeline for energy-sector review analytics.
 
-easy
-good
-great
-charging
-charger
-work
-service
-excellent
+The sentiment classification task produced reliable results for positive and negative customer feedback. The final tuned sentiment model achieved strong overall performance while improving macro F1 compared with the baseline.
 
-Common negative terms included:
+The rating prediction task was more difficult because exact star ratings require more fine-grained classification. The tuned rating model improved macro F1 and Mean Absolute Error, but middle ratings remained challenging due to class imbalance.
 
-work
-update
-time
-charging
-useless
-card
-issue
-account
+Overall, the project shows how classical NLP and machine learning methods can be used to analyze energy-sector customer feedback, identify common satisfaction and complaint patterns, and support customer experience monitoring.
 
-Negative reviews often contained more detailed explanations of technical problems, login issues, payment failures, or charging difficulties.
+---
 
 ## Limitations
 
@@ -220,15 +265,7 @@ Negative reviews often contained more detailed explanations of technical problem
 * Star ratings are used as proxy labels for sentiment.
 * The dataset is source-dependent because Google Play reviews may change over time.
 
-## Conclusion
-
-This project demonstrates a complete NLP pipeline for energy-sector review analytics.
-
-The sentiment classification task produced reliable results for positive and negative customer feedback. The final tuned sentiment model achieved strong overall performance while improving macro F1 compared with the baseline.
-
-The rating prediction task was more difficult because exact star ratings require more fine-grained classification. The tuned rating model improved macro F1 and Mean Absolute Error, but middle ratings remained challenging due to class imbalance.
-
-Overall, the project shows how machine learning can be applied to public energy app reviews to identify customer satisfaction patterns, common complaints, and digital service issues.
+---
 
 ## Tools and Libraries
 
@@ -243,16 +280,21 @@ Overall, the project shows how machine learning can be applied to public energy 
 * Jupyter Notebook
 * Git and GitHub
 
+---
+
 ## Project Structure
 
-nlp-yelp-sentiment-rating-prediction/
+```text
+energy-app-review-sentiment-rating-prediction/
 │
 ├── config/
 │   └── energy_apps_shortlist.csv
 │
 ├── data/
 │   ├── raw/
+│   │   └── .gitkeep
 │   └── processed/
+│       └── .gitkeep
 │
 ├── docs/
 │   ├── dataset_notes.md
@@ -273,91 +315,139 @@ nlp-yelp-sentiment-rating-prediction/
 │
 ├── src/
 │   ├── collect_reviews.py
+│   ├── data_loader.py
+│   ├── evaluate.py
 │   ├── preprocessing.py
 │   ├── train.py
-│   ├── evaluate.py
 │   └── predict.py
+│
+├── models/
+│   └── .gitkeep
 │
 ├── README.md
 ├── requirements.txt
 └── .gitignore
+```
+
+---
 
 ## How to Run the Project
 
 ### 1. Clone the repository
 
+```bash
 git clone <repository-url>
-cd nlp-yelp-sentiment-rating-prediction
-
+cd energy-app-review-sentiment-rating-prediction
+```
 
 ### 2. Create a virtual environment
 
+```bash
 python -m venv .venv
+```
 
 Activate it on Windows:
 
+```bash
 .venv\Scripts\activate
+```
 
 Activate it on macOS/Linux:
 
+```bash
 source .venv/bin/activate
-
+```
 
 ### 3. Install dependencies
 
+```bash
 pip install -r requirements.txt
-
-This creates the raw dataset locally:
-
-data/raw/energy_app_reviews_raw.csv
-
+```
 
 ### 4. Collect public Google Play reviews
 
+```bash
 python src/collect_reviews.py
+```
 
+This creates the raw dataset locally:
+
+```text
+data/raw/energy_app_reviews_raw.csv
+```
+
+The raw dataset is not committed to GitHub because it can be recreated using the script.
 
 ### 5. Preprocess the review dataset
 
+```bash
 python src/preprocessing.py
+```
 
 This creates the cleaned dataset locally:
 
+```text
 data/processed/energy_app_reviews_cleaned.csv
-
+```
 
 ### 6. Train final models using reusable scripts
 
+```bash
 python src/train.py
+```
 
 This trains and saves:
 
+```text
 models/final_sentiment_model.pkl
 models/final_rating_model.pkl
+```
 
+It also creates final script-based reports in the `reports/` folder.
 
 ### 7. Run prediction demo
 
 Run default example predictions:
 
+```bash
 python src/predict.py
+```
 
 Run prediction on custom review text:
 
-python src/predict.py --text "Write a review here"
+```bash
+python src/predict.py --text "The app keeps crashing and I cannot submit my meter reading."
+```
 
+Example output:
 
-### 8. Run Notebooks
+```text
+Predicted sentiment : Negative
+Predicted rating    : 1
+```
+
+### 8. Run notebooks
 
 The notebooks can be run in this order:
 
+```text
 01_data_exploration.ipynb
 02_text_preprocessing.ipynb
 03_model_training_evaluation.ipynb
+```
 
+---
 
-## Note on Raw Data
+## Note on Raw Data and Models
 
-The raw and processed datasets are not committed to GitHub because they can be recreated using the collection and preprocessing scripts.
+The raw dataset, processed dataset, and trained model files are not committed to GitHub.
 
-The generated reports and figures are included to make the project results easy to review.
+They can be recreated by running:
+
+```bash
+python src/collect_reviews.py
+python src/preprocessing.py
+python src/train.py
+```
+
+Generated reports and figures are included to make the project results easy to review.
