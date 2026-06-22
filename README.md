@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-This project builds an end-to-end Natural Language Processing and Machine Learning pipeline to analyze public customer reviews from energy-sector mobile applications.
+This project analyzes public Google Play reviews from energy-related mobile apps using a classical NLP and machine learning pipeline.
 
 The dataset contains Google Play Store reviews from energy supplier apps, EV charging apps, mobility apps, and smart home energy services. The goal is to classify customer sentiment and predict star ratings based on review text.
 
-The project is designed as a practical text analytics workflow for understanding customer feedback patterns in the energy sector.
+The main idea is to show how app reviews can be turned into useful signals about customer satisfaction, complaints, and product issues.
 
 ---
 
@@ -14,9 +14,21 @@ The project is designed as a practical text analytics workflow for understanding
 
 Energy companies increasingly provide digital services through mobile applications. Customers use these apps for tasks such as checking energy usage, submitting meter readings, managing accounts, making payments, finding EV charging stations, and reporting technical issues.
 
-Public app reviews contain useful feedback about customer satisfaction, usability problems, charging issues, login problems, payment failures, and service quality.
+Instead of reading reviews manually, this project uses NLP models to group reviews by sentiment and estimate the likely star rating from the text.
 
-This project shows how NLP can be used to extract insights from unstructured review text and support customer experience monitoring.
+---
+
+## Key Skills Demonstrated
+
+* Collecting public review data using Python
+* Cleaning and preprocessing text data
+* Creating sentiment labels from star ratings
+* Building scikit-learn NLP pipelines
+* Comparing baseline and tuned machine learning models
+* Evaluating classification models using Accuracy, Macro F1, Weighted F1, and MAE
+* Saving trained models with Joblib
+* Creating reusable scripts for training and prediction
+* Organizing a machine learning project for GitHub
 
 ---
 
@@ -27,7 +39,7 @@ The dataset was collected from public Google Play Store reviews using the `googl
 After preprocessing, the dataset used for training and evaluation contained:
 
 | Metric                    | Value |
-|                           |       |
+|---------------------------|-------|
 | Total reviews             | 3,070 |
 | Number of apps            |     8 |
 | Average rating            |  2.97 |
@@ -57,14 +69,14 @@ Example apps include:
 
 ## Project Tasks
 
-This project contains two machine learning tasks.
+The project focuses on two prediction tasks.
 
 ### 1. Sentiment Classification
 
 The original 1-to-5 star ratings were mapped into three sentiment classes:
 
 | Rating | Sentiment |  
-
+|--------|-----------|
 | 1, 2   | Negative  |
 | 3      | Neutral   |
 | 4, 5   | Positive  |
@@ -190,16 +202,14 @@ Negative reviews often contained more detailed explanations of technical problem
 
 ## Sentiment Classification Results
 
-The final sentiment model was selected after comparing baseline and tuned models.
-
 The final sentiment model was selected after comparing the baseline and tuned models.
 
 |  Stage   |            Model              | Accuracy | Macro F1 | Weighted F1 |
-|          |                               |          |          |             |
+|----------|-------------------------------|----------|----------|-------------|    
 | Baseline | CountVectorizer + Naive Bayes | 0.8062   | 0.5960   | 0.7855      |
 | Tuned    | CountVectorizer + Naive Bayes | 0.8013   | 0.6203   | 0.7878      |
 
-Although the baseline model had slightly higher accuracy, the tuned model was selected because it achieved better Macro F1 and Weighted F1 scores. This indicates better overall balance across sentiment classes.
+The baseline model had slightly higher accuracy, but the tuned model was chosen because it improved Macro F1 and Weighted F1. For this dataset, that trade-off is useful because the neutral class is much smaller than the positive and negative classes.
 
 ---
 
@@ -218,7 +228,7 @@ This is a realistic result for public app review data, where users often leave r
 The final rating prediction model was selected after comparing baseline and tuned models.
 
 |  Stage   |                Model                  | Accuracy | Macro F1  | Weighted F1 |  MAE   |
-|          |                                       |          |           |             |        |
+|----------|---------------------------------------|----------|-----------|-------------|--------|    
 | Baseline | CountVectorizer + Naive Bayes         | 0.6840   |  0.3958   |   0.6399    | 0.7394 |
 | Tuned    | CountVectorizer + Logistic Regression | 0.6466   |  0.4302   |   0.6426    | 0.7296 |
 
@@ -228,7 +238,7 @@ Tuned model parameters:
 - C: 1.0
 - Class weight: balanced
 
-Although the baseline model achieved higher accuracy, the tuned Logistic Regression model was selected because it improved Macro F1, Weighted F1, and MAE. This means the tuned model gave more balanced predictions across rating classes and slightly reduced the average prediction error.
+The Naive Bayes baseline reached higher accuracy, but the tuned Logistic Regression model performed better on Macro F1, Weighted F1, and MAE. I selected it because rating prediction is imbalanced, so accuracy alone was not the best selection criterion.
 
 ---
 
@@ -246,13 +256,14 @@ Mean Absolute Error was included because ratings are ordered. Predicting 4 inste
 
 ## Final Conclusion
 
-This project demonstrates a complete NLP pipeline for energy-sector review analytics.
+This project shows how classical NLP and machine learning models can be used to analyze customer reviews from energy-related mobile apps.
 
-The sentiment classification task produced reliable results for positive and negative customer feedback. The final tuned sentiment model achieved strong overall performance while improving macro F1 compared with the baseline.
+The sentiment classification model performed well on clearly positive and clearly negative reviews. Neutral reviews were more difficult because they appeared less often and sometimes contained mixed feedback.
 
-The rating prediction task was more difficult because exact star ratings require more fine-grained classification. The tuned rating model improved macro F1 and Mean Absolute Error, but middle ratings remained challenging due to class imbalance.
+The rating prediction task was harder because the model had to predict five ordered rating classes instead of three sentiment groups. The tuned Logistic Regression model was selected because it improved Macro F1, Weighted F1, and MAE, even though the baseline model had slightly higher accuracy.
 
-Overall, the project shows how classical NLP and machine learning methods can be used to analyze energy-sector customer feedback, identify common satisfaction and complaint patterns, and support customer experience monitoring.
+From a project perspective, this repository demonstrates the full workflow: review collection, preprocessing, exploratory analysis, feature extraction, model training, evaluation, model saving, and prediction using reusable scripts.
+
 
 ---
 
@@ -440,9 +451,7 @@ The notebooks can be run in this order:
 
 ## Note on Raw Data and Models
 
-The raw dataset, processed dataset, and trained model files are not committed to GitHub.
-
-They can be recreated by running:
+The raw dataset, processed dataset, and trained model files are not committed to GitHub and can be recreated by running:
 
 ```bash
 python src/collect_reviews.py
