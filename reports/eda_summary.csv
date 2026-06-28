@@ -1,8 +1,8 @@
 metric,value
-total_reviews,3070.0
+total_reviews,3084.0
 unique_apps,8.0
-average_rating,2.97
-average_word_count,22.57
-positive_reviews,1411.0
-negative_reviews,1439.0
-neutral_reviews,220.0
+average_rating,2.99
+average_word_count,22.56
+positive_reviews,1436.0
+negative_reviews,1440.0
+neutral_reviews,208.0
