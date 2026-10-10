@@ -37,7 +37,7 @@ Instead of reading reviews manually, this project uses NLP models to group revie
 The dataset was collected from public Google Play Store reviews using the `google-play-scraper` Python package.
 
 After preprocessing, the dataset used for training and evaluation contained:
-
+ 
 | Metric                    | Value |
 |---------------------------|-------|
 | Total reviews             | 3,070 |
@@ -85,7 +85,7 @@ The original 1-to-5 star ratings were mapped into three sentiment classes:
 
 The second task predicts the original star rating:
 
-```text
+```
 1, 2, 3, 4, or 5 stars
 ```
 
@@ -145,7 +145,7 @@ TF-IDF gives higher importance to terms that are frequent in a review but not to
 
 Both methods used unigrams and bigrams to capture words and short phrases such as:
 
-```text
+```
 charging station
 not working
 customer service
@@ -172,7 +172,7 @@ The review dataset showed strong polarization between positive and negative feed
 
 Common positive terms included:
 
-```text
+```
 easy
 good
 great
@@ -185,7 +185,7 @@ excellent
 
 Common negative terms included:
 
-```text
+```
 work
 update
 time
@@ -295,7 +295,7 @@ From a project perspective, this repository demonstrates the full workflow: revi
 
 ## Project Structure
 
-```text
+```
 energy-app-review-sentiment-rating-prediction/
 │
 ├── config/
@@ -383,7 +383,7 @@ python src/collect_reviews.py
 
 This creates the raw dataset locally:
 
-```text
+```
 data/raw/energy_app_reviews_raw.csv
 ```
 
@@ -397,7 +397,7 @@ python src/preprocessing.py
 
 This creates the cleaned dataset locally:
 
-```text
+```
 data/processed/energy_app_reviews_cleaned.csv
 ```
 
@@ -409,7 +409,7 @@ python src/train.py
 
 This trains and saves:
 
-```text
+```
 models/final_sentiment_model.pkl
 models/final_rating_model.pkl
 ```
@@ -432,7 +432,7 @@ python src/predict.py --text "The app keeps crashing and I cannot submit my mete
 
 Example output:
 
-```text
+```
 Predicted sentiment : Negative
 Predicted rating    : 1
 ```
@@ -441,7 +441,7 @@ Predicted rating    : 1
 
 The notebooks can be run in this order:
 
-```text
+```
 01_data_exploration.ipynb
 02_text_preprocessing.ipynb
 03_model_training_evaluation.ipynb
@@ -460,3 +460,4 @@ python src/train.py
 ```
 
 Generated reports and figures are included to make the project results easy to review.
+
