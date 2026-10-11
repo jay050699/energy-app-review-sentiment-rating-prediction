@@ -1,52 +1,77 @@
 # Energy App Review Sentiment Analysis and Rating Prediction
 
-## Project Overview
+This project analyzes public Google Play reviews from energy-related mobile apps and uses classical NLP models to classify review sentiment and predict star ratings.
 
-This project analyzes public Google Play reviews from energy-related mobile apps using a classical NLP and machine learning pipeline.
+I chose energy supplier apps, EV charging apps, mobility apps, and smart home energy services because the reviews are usually very direct. Users often mention problems with login, payments, meter readings, charging sessions, updates, app crashes, and customer support. That makes the dataset useful for practicing text analytics on realistic customer feedback.
 
-The dataset contains Google Play Store reviews from energy supplier apps, EV charging apps, mobility apps, and smart home energy services. The goal is to classify customer sentiment and predict star ratings based on review text.
-
-The main idea is to show how app reviews can be turned into useful signals about customer satisfaction, complaints, and product issues.
+The project follows a complete machine learning workflow: collecting reviews, cleaning text, exploring review patterns, extracting NLP features, training baseline and tuned models, comparing metrics, and saving the results in reports that can be reviewed later.
 
 ---
 
-## Business Motivation
+## What the project covers
 
-Energy companies increasingly provide digital services through mobile applications. Customers use these apps for tasks such as checking energy usage, submitting meter readings, managing accounts, making payments, finding EV charging stations, and reporting technical issues.
+The project focuses on two prediction tasks:
 
-Instead of reading reviews manually, this project uses NLP models to group reviews by sentiment and estimate the likely star rating from the text.
+1. **Sentiment classification**  
+   Predict whether a review is negative, neutral, or positive.
+
+2. **Rating prediction**  
+   Predict the original 1-to-5 star rating from the review text.
+
+The sentiment task is useful for getting a quick view of customer mood. The rating task is harder because the model has to separate five rating classes, especially the middle ratings where the review text is often less clear.
 
 ---
 
-## Key Skills Demonstrated
+## Why I built this
 
-* Collecting public review data using Python
-* Cleaning and preprocessing text data
-* Creating sentiment labels from star ratings
-* Building scikit-learn NLP pipelines
-* Comparing baseline and tuned machine learning models
-* Evaluating classification models using Accuracy, Macro F1, Weighted F1, and MAE
-* Saving trained models with Joblib
-* Creating reusable scripts for training and prediction
-* Organizing a machine learning project for GitHub
+Energy companies depend more and more on digital apps for customer-facing services such as account management, payments, meter readings, EV charging, and support. Public reviews can show where users are satisfied and where they repeatedly face issues.
+
+Instead of reading reviews one by one, this project turns review text into structured outputs:
+
+- sentiment labels
+- predicted star ratings
+- rating and sentiment distributions
+- common positive and negative terms
+- model comparison reports
+- reusable prediction scripts
+
+The goal was not only to train a model, but to organize the whole project in a way that is easy to review, reproduce, and explain.
+
+---
+
+## Technical scope
+
+The project includes:
+
+- collecting public Google Play review data with Python
+- preparing an app shortlist for energy-related services
+- cleaning and preprocessing real-world review text
+- creating sentiment labels from star ratings
+- exploring rating and sentiment distributions
+- extracting features with CountVectorizer and TF-IDF
+- training Naive Bayes and Logistic Regression models
+- comparing baseline and tuned models
+- evaluating models with Accuracy, Macro F1, Weighted F1, and MAE
+- saving reports, figures, and a summary Excel workbook
+- creating reusable scripts for collection, preprocessing, training, and prediction
 
 ---
 
 ## Dataset
 
-The dataset was collected from public Google Play Store reviews using the `google-play-scraper` Python package.
+The reviews were collected from public Google Play Store reviews using the `google-play-scraper` Python package.
 
-After preprocessing, the dataset used for training and evaluation contained:
- 
-| Metric                    | Value |
-|---------------------------|-------|
+After preprocessing, the final dataset used for modeling contained:
+
+|          Metric           | Value |
+|---------------------------|------:|
 | Total reviews             | 3,070 |
-| Number of apps            |     8 |
-| Average rating            |  2.97 |
+| Number of apps            | 8     |
+| Average rating            | 2.97  |
 | Average review word count | 22.57 |
 | Positive reviews          | 1,411 |
 | Negative reviews          | 1,439 |
-| Neutral reviews           |   220 |
+| Neutral reviews           | 220   |
 
 ---
 
