@@ -4,7 +4,7 @@ This project analyzes public Google Play reviews from energy-related mobile apps
 
 I chose energy supplier apps, EV charging apps, mobility apps, and smart home energy services because the reviews are usually very direct. Users often mention problems with login, payments, meter readings, charging sessions, updates, app crashes, and customer support. That makes the dataset useful for practicing text analytics on realistic customer feedback.
 
-The project follows a complete machine learning workflow: collecting reviews, cleaning text, exploring review patterns, extracting NLP features, training baseline and tuned models, comparing metrics, and saving the results in reports that can be reviewed later.
+The project follows a complete machine learning workflow: collecting reviews, cleaning text, exploring review patterns, extracting NLP features, training baseline, tuned, and experiment models, comparing metrics, and saving the results in reports that can be reviewed later.
 
 ---
 
@@ -50,7 +50,7 @@ The project includes:
 - exploring rating and sentiment distributions
 - extracting features with CountVectorizer and TF-IDF
 - training Naive Bayes, Logistic Regression, and LinearSVC models
-- comparing baseline and tuned models
+- comparing baseline, tuned, and experiment models
 - evaluating models with Accuracy, Macro F1, Weighted F1, and MAE
 - saving reports, figures, and a summary Excel workbook
 - creating reusable scripts for collection, preprocessing, training, and prediction
