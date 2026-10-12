@@ -49,7 +49,7 @@ The project includes:
 - creating sentiment labels from star ratings
 - exploring rating and sentiment distributions
 - extracting features with CountVectorizer and TF-IDF
-- training Naive Bayes and Logistic Regression models
+- training Naive Bayes, Logistic Regression, and LinearSVC models
 - comparing baseline and tuned models
 - evaluating models with Accuracy, Macro F1, Weighted F1, and MAE
 - saving reports, figures, and a summary Excel workbook
@@ -236,7 +236,7 @@ Macro F1 was especially important because neutral reviews and middle ratings had
 
 ## Sentiment classification results
 
-The final sentiment model was selected after comparing baseline and tuned models.
+The final sentiment model was selected after comparing baseline, tuned, and additional experiment models.
 
 | Stage          | Model                                  | Accuracy | Macro F1 | Weighted F1 |
 |----------------|----------------------------------------|----------|----------|-------------|
@@ -264,7 +264,7 @@ The final sentiment model performs well on clearly positive and clearly negative
 
 ## Rating prediction results
 
-The final rating model was selected after comparing baseline and tuned models.
+The final rating model was selected after comparing baseline, tuned, and additional experiment models.
 
 | Stage          | Model                                 | Accuracy | Macro F1 | Weighted F1 | MAE    |
 |----------------|---------------------------------------|----------|----------|-------------|--------|
@@ -318,12 +318,11 @@ These limitations are expected for a lightweight, reproducible NLP project built
 
 I would try the following improvements in a next version:
 
-- Test LinearSVC with TF-IDF features.
-- Test Complement Naive Bayes for imbalanced text classification.
+- Tune LinearSVC and Logistic Regression hyperparameters more deeply.
+- Compare word-level TF-IDF, character-level TF-IDF, and combined feature pipelines.
 - Tune vectorizer settings such as `max_features`, `min_df`, `max_df`, and n-gram range.
-- Try character n-grams to handle short reviews, typos, and app-specific wording.
 - Collect more reviews to improve neutral and middle-rating classes.
-- Treat rating prediction as an ordinal classification problem.
+- Treat rating prediction as an ordinal classification problem instead of a standard multi-class task.
 - Compare the classical ML pipeline with a small transformer-based model.
 
 I kept the current version focused on classical machine learning because it is easier to reproduce, faster to run, and more interpretable for a first complete NLP workflow.
