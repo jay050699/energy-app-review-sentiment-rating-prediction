@@ -179,10 +179,11 @@ Examples of useful phrases:
 
 The project uses classical machine learning models from scikit-learn.
 
-| Model                   | Why it was used                                    |
-|-------------------------|----------------------------------------------------|
-| Multinomial Naive Bayes | Fast and reliable baseline for text classification |
-| Logistic Regression     | Strong linear model for sparse text features       |
+| Model                   | Why it was used                                                         |
+|-------------------------|-------------------------------------------------------------------------|
+| Multinomial Naive Bayes | Fast and reliable baseline for text classification                      |
+| Logistic Regression     | Strong linear model for sparse text features                            |
+| LinearSVC               | Strong margin-based classifier often effective for TF-IDF text features |
 
 The models are built using scikit-learn pipelines, where vectorization and classification are handled together.
 
@@ -292,9 +293,9 @@ Rating prediction is still harder than sentiment classification because the mode
 - Neutral reviews are harder to classify because they are less frequent and often contain mixed language.
 - Exact star-rating prediction is harder than sentiment classification.
 - Middle ratings are more difficult to predict than extreme ratings.
-- CountVectorizer performed strongly and was used in both selected final models.
+- Character-level TF-IDF improved the sentiment model by increasing Macro F1 and Weighted F1.
+- TF-IDF + LinearSVC improved rating prediction by reducing average rating error.
 - Negative reviews often contain more specific issue-related terms than positive reviews.
-
 ---
 
 ## Limitations
