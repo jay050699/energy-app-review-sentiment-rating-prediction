@@ -1,0 +1,3 @@
+task,final_model,accuracy,macro_f1,weighted_f1,mae
+sentiment,Character TF-IDF + Logistic Regression,0.7925,0.6322,0.7963,
+rating,TF-IDF + LinearSVC,0.671,0.4008,0.6534,0.6645

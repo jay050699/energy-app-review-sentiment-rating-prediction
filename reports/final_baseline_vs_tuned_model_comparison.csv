@@ -1,4 +1,4 @@
-stage,selection_criterion,model_name,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,best_params,comment
-Baseline,Best Accuracy,CountVectorizer + Naive Bayes,0.8062,0.6543,0.598,0.596,0.7855,Default / baseline settings,Shows the strongest initial overall accuracy before tuning.
-Baseline,Best Macro F1,TF-IDF + Logistic Regression,0.7655,0.6145,0.6201,0.6152,0.7736,Default / baseline settings,Shows the most balanced baseline model across sentiment classes.
-Tuned,Best Macro F1,CountVectorizer + Naive Bayes,0.8013,0.6561,0.6137,0.6203,0.7878,{'model__alpha': 0.5},Selected as final model because macro F1 is most suitable for imbalanced sentiment classes.
+stage,selection_criterion,model_name,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,mean_absolute_error,best_params,comment
+Baseline,Reference baseline,CountVectorizer + Naive Bayes,0.8039,0.6439,0.5954,0.5946,0.7853,,Default settings,Simple baseline model for sentiment classification.
+Tuned,Previous selected model,CountVectorizer + Naive Bayes,0.7974,0.6163,0.5975,0.5983,0.7842,,alpha = 0.5,Previous final model before additional experiments.
+Final,Best Macro F1 and Weighted F1,Character TF-IDF + Logistic Regression,0.7925,0.6329,0.6347,0.6322,0.7963,,"char_wb ngrams 3-5, max_features = 20000, class_weight = balanced",Selected because it improved class-balanced sentiment performance.

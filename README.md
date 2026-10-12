@@ -64,14 +64,14 @@ The reviews were collected from public Google Play Store reviews using the `goog
 After preprocessing, the final dataset used for modeling contained:
 
 | Metric                    | Value |
-|---------------------------|------:|
-| Total reviews             | 3,070 |
+|---------------------------|-------|
+| Total reviews             | 3,084 |
 | Number of apps            | 8     |
-| Average rating            | 2.97  |
-| Average review word count | 22.57 |
-| Positive reviews          | 1,411 |
-| Negative reviews          | 1,439 |
-| Neutral reviews           | 220   |
+| Average rating            | 2.99  |
+| Average review word count | 22.56 |
+| Positive reviews          | 1,436 |
+| Negative reviews          | 1,440 |
+| Neutral reviews           | 208   |
 
 Raw and processed datasets are not committed to the repository. They are created locally by running the data collection and preprocessing scripts.
 
@@ -237,22 +237,27 @@ Macro F1 was especially important because neutral reviews and middle ratings had
 
 The final sentiment model was selected after comparing baseline and tuned models.
 
-| Stage    | Model                         | Accuracy | Macro F1 | Weighted F1 |
-|----------|-------------------------------|----------|----------|-------------|
-| Baseline | CountVectorizer + Naive Bayes | 0.8062   | 0.5960   | 0.7855      |
-| Tuned    | CountVectorizer + Naive Bayes | 0.8013   | 0.6203   | 0.7878      |
+| Stage          | Model                                  | Accuracy | Macro F1 | Weighted F1 |
+|----------------|----------------------------------------|----------|----------|-------------|
+| Baseline       | CountVectorizer + Naive Bayes          | 0.8039   | 0.5946   | 0.7853      |
+| Previous tuned | CountVectorizer + Naive Bayes          | 0.7974   | 0.5983   | 0.7842      |
+| Final          | Character TF-IDF + Logistic Regression | 0.7925   | 0.6322   | 0.7963      |
 
 Final selected sentiment model:
 
-| Component      | Value                   |
-|----------------|-------------------------|
-| Feature method | CountVectorizer         |
-| Model          | Multinomial Naive Bayes |
-| Alpha          | 0.5                     |
+| Component      | Value               | 
+|----------------|---------------------|
+| Feature method | Character TF-IDF    |
+| Analyzer       | `char_wb`           |
+| N-gram range   | 3 to 5              |
+| Model          | Logistic Regression |
+| Class weight   | balanced            |
 
-The baseline model had slightly higher accuracy, but the tuned model improved Macro F1 and Weighted F1. I selected the tuned model because the dataset is imbalanced, and Macro F1 gives a better view of how the model performs across all classes.
+The CountVectorizer + Naive Bayes baseline produced the highest accuracy, but the Character TF-IDF + Logistic Regression model gave better Macro F1 and Weighted F1. I selected the Character TF-IDF model because the dataset is imbalanced, and a small drop in accuracy was acceptable for better class-balanced performance.
 
-The sentiment model performs well on clearly positive and clearly negative reviews. Neutral reviews are harder because there are fewer neutral examples and many of them contain mixed feedback.
+Character-level TF-IDF also helps with short app reviews, spelling variations, and repeated issue patterns that may not always appear as clean full words.
+
+The final sentiment model performs well on clearly positive and clearly negative reviews. Neutral reviews remain more difficult because there are fewer neutral examples and many neutral reviews contain mixed feedback.
 
 ---
 
@@ -260,25 +265,24 @@ The sentiment model performs well on clearly positive and clearly negative revie
 
 The final rating model was selected after comparing baseline and tuned models.
 
-| Stage    | Model                                 | Accuracy | Macro F1 | Weighted F1 | MAE    |
-|----------|---------------------------------------|----------|----------|-------------|--------|
-| Baseline | CountVectorizer + Naive Bayes         | 0.6840   | 0.3958   | 0.6399      | 0.7394 |
-| Tuned    | CountVectorizer + Logistic Regression | 0.6466   | 0.4302   | 0.6426      | 0.7296 |
+| Stage          | Model                                 | Accuracy | Macro F1 | Weighted F1 | MAE    |
+|----------------|---------------------------------------|----------|----------|-------------|--------|
+| Baseline       | CountVectorizer + Naive Bayes         | 0.6596   | 0.3504   | 0.6122      | 0.8104 |
+| Previous tuned | CountVectorizer + Logistic Regression | 0.6321   | 0.3978   | 0.6344      | 0.7115 |
+| Final          | TF-IDF + LinearSVC                    | 0.6710   | 0.4008   | 0.6534      | 0.6645 |
 
 Final selected rating model:
 
 | Component      | Value               |
 |----------------|---------------------|
-| Feature method | CountVectorizer     |
-| Model          | Logistic Regression |
+| Feature method | TF-IDF              |
+| Model          | LinearSVC           |
 | C              | 1.0                 |
 | Class weight   | balanced            |
 
-The Naive Bayes baseline reached higher accuracy, but the tuned Logistic Regression model performed better on Macro F1, Weighted F1, and MAE. I selected it because exact rating prediction is imbalanced, and accuracy alone is not the best selection criterion.
+The TF-IDF + LinearSVC model was selected as the final rating model because it achieved the best accuracy, Weighted F1, and MAE among the tested models. The MAE improvement is important because star ratings are ordered: predicting 4 instead of 5 is a smaller error than predicting 1 instead of 5.
 
-Rating prediction is clearly harder than sentiment classification. The model performs better on 1-star and 5-star reviews, while 2-star, 3-star, and 4-star reviews are more difficult because they are less frequent and often less clearly worded.
-
-The MAE score is useful here because star ratings are ordered. Predicting 4 instead of 5 is a smaller mistake than predicting 1 instead of 5.
+Rating prediction is still harder than sentiment classification because the model has to separate five rating levels. The model performs better on clear 1-star and 5-star reviews, while 2-star, 3-star, and 4-star reviews are more difficult because they are less frequent and often less clearly worded.
 
 ---
 
@@ -340,6 +344,7 @@ I kept the current version focused on classical machine learning because it is e
 | `requirements.txt` | Python dependencies                                                        |
 | `config.yaml`      | Project configuration                                                      |
 | `.gitignore`       | Excludes generated datasets, models, cache files, and virtual environments |
+| `experiments/`     | Additional model comparison experiments                                    |
 
 ---
 
@@ -360,6 +365,9 @@ energy-app-review-sentiment-rating-prediction/
 ├── docs/
 │   ├── dataset_notes.md
 │   └── project_plan.md
+│
+├── experiments/
+│   └── model_improvement_experiments.py
 │
 ├── notebooks/
 │   ├── 01_data_exploration.ipynb
@@ -388,7 +396,9 @@ energy-app-review-sentiment-rating-prediction/
 │   ├── top_countvectorizer_features.csv
 │   ├── top_negative_words.csv
 │   ├── top_positive_words.csv
-│   └── top_tfidf_features.csv
+│   ├── top_tfidf_features.csv
+│   ├── final_model_summary.csv
+│   └── model_improvement_experiments.csv
 │
 ├── src/
 │   ├── __init__.py
