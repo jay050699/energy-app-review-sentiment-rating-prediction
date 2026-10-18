@@ -1,3 +1,5 @@
-model_name,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1
-CountVectorizer + Naive Bayes,0.8061889250814332,0.6542807140869615,0.5979587542087542,0.5959634424424878,0.7854737650915377
-TF-IDF + Logistic Regression,0.7654723127035831,0.6144939407670768,0.6201241134751773,0.6152136318718469,0.7735601922276439
+evaluation_set,stage,selection_criterion,model_name,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,mean_absolute_error,best_params,comment
+validation,Baseline,Validation Macro F1,CountVectorizer + Naive Bayes,0.8067,0.6638,0.6669,0.6645,0.8104,,MultinomialNB(),"Validation-only metrics, not held-out test metrics"
+validation,Candidate,Validation Macro F1,CountVectorizer + Tuned Naive Bayes,0.8062,0.6636,0.6672,0.6644,0.8103,,MultinomialNB(alpha=0.5),"Validation-only metrics, not held-out test metrics"
+validation,Candidate,Validation Macro F1,Character TF-IDF + Logistic Regression,0.7546,0.6644,0.6936,0.6522,0.7877,,"LogisticRegression(class_weight='balanced', max_iter=3000, random_state=42)","Validation-only metrics, not held-out test metrics"
+validation,Selected,Validation Macro F1,TF-IDF + LinearSVC,0.8176,0.6668,0.6683,0.6672,0.82,,"LinearSVC(class_weight='balanced', random_state=42)",Selected by validation Macro F1; final metrics in final_model_summary.csv

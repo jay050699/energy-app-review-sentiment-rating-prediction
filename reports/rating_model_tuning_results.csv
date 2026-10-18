@@ -1,5 +1,5 @@
-model_name,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,mean_absolute_error,best_params,best_cv_macro_f1
-CountVectorizer + Logistic Regression,0.6465798045602605,0.4319750168963581,0.429272920471675,0.43023049086122817,0.6426266951580445,0.7296416938110749,"{'model__C': 1.0, 'model__class_weight': 'balanced'}",0.4191338952143808
-TF-IDF + Logistic Regression,0.5912052117263844,0.40809267907790076,0.4069549823986772,0.40163753816554887,0.6098975902770986,0.760586319218241,"{'model__C': 0.5, 'model__class_weight': 'balanced'}",0.4275787600394305
-CountVectorizer + Naive Bayes,0.6661237785016286,0.4164037349565136,0.39412524683412076,0.39450576343397215,0.6343508800142478,0.760586319218241,{'model__alpha': 0.5},0.4032960849684121
-TF-IDF + Naive Bayes,0.6889250814332247,0.44447192496694854,0.37258118287179004,0.355662585888705,0.6245940108776045,0.744299674267101,{'model__alpha': 0.1},0.3718403254337744
+evaluation_set,stage,selection_criterion,model_name,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,mean_absolute_error,best_params,comment
+validation,Selected,Validation Macro F1,CountVectorizer + Naive Bayes,0.6729,0.4801,0.4701,0.4737,0.6615,0.568,MultinomialNB(),Selected by validation Macro F1; final metrics in final_model_summary.csv
+validation,Candidate,Validation Macro F1,CountVectorizer + Logistic Regression,0.5915,0.4605,0.4688,0.4552,0.6225,0.636,"LogisticRegression(class_weight='balanced', max_iter=3000, random_state=42)","Validation-only metrics, not held-out test metrics"
+validation,Candidate,Validation Macro F1,TF-IDF + LinearSVC,0.6534,0.4711,0.4722,0.4713,0.6562,0.5693,"LinearSVC(class_weight='balanced', random_state=42)","Validation-only metrics, not held-out test metrics"
+validation,Candidate,Validation Macro F1,Character TF-IDF + Logistic Regression,0.5974,0.4761,0.4874,0.47,0.6314,0.6121,"LogisticRegression(class_weight='balanced', max_iter=3000, random_state=42)","Validation-only metrics, not held-out test metrics"

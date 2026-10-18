@@ -1,39 +1,33 @@
+# Project configuration overview. Python scripts expose their own documented CLI
+# options and use config/energy_apps_shortlist.csv as the app-ID catalog.
 project:
-  name: "NLP Sentiment Analysis and Rating Prediction"
-  version: "1.0.0"
+  name: energy-app-review-sentiment-rating-prediction
+  title: Energy App Review Sentiment Analysis and Rating Prediction
 
 data:
-  raw_data_path: "data/raw/reviews.csv"
-  processed_data_path: "data/processed/cleaned_reviews.csv"
-  text_column: "review_text"
-  rating_column: "rating"
-  sentiment_column: "sentiment"
+  sources:
+    - google_play
+    - apple_app_store
+  language: en
+  english_confidence: 0.92
+  min_words_for_language_detection: 5
+  app_catalog: config/energy_apps_shortlist.csv
+  raw_path: data/raw/energy_app_reviews_raw.csv
+  processed_path: data/processed/energy_app_reviews_cleaned.csv
 
-preprocessing:
-  lowercase: true
-  remove_punctuation: true
-  remove_numbers: false
-  remove_stopwords: true
-  lemmatization: true
+labels:
+  sentiment:
+    negative_ratings: [1, 2]
+    neutral_ratings: [3]
+    positive_ratings: [4, 5]
 
-features:
-  count_vectorizer:
-    max_features: 5000
-    ngram_range: [1, 2]
-
-  tfidf_vectorizer:
-    max_features: 5000
-    ngram_range: [1, 2]
-
-model:
-  test_size: 0.2
-  random_state: 42
-
-models_to_train:
-  - naive_bayes
-  - logistic_regression
-
-outputs:
-  model_dir: "models"
-  figures_dir: "reports/figures"
-  results_path: "reports/model_results.csv"
+modeling:
+  random_seed: 42
+  split: StratifiedGroupKFold
+  grouping: normalized_cleaned_review_text
+  train_fraction_approx: 0.6
+  validation_fraction_approx: 0.2
+  test_fraction_approx: 0.2
+  model_selection_metric: macro_f1
+  sentiment_model_path: models/final_sentiment_model.pkl
+  rating_model_path: models/final_rating_model.pkl

@@ -1,9 +1,20 @@
 app_name,review_count,average_rating,average_word_count,min_word_count,max_word_count
-E.ON Myline,500,2.21,19.302,1,91
-Hive,500,2.15,29.742,1,107
-Octopus Electroverse,500,3.838,25.796,1,99
-PlugShare,500,4.008,16.55,1,100
-Shell,500,3.43,16.468,1,99
-ScottishPower,500,2.994,19.964,1,102
-E.ON Next Home,111,2.27027027027027,29.25225225225225,1,95
-Vattenfall InCharge,90,2.188888888888889,28.977777777777778,1,171
+Hive,10686,2.2121,33.67,3,538
+ScottishPower,9079,2.798,25.81,4,441
+ChargePoint,8085,2.9739,30.14,3,484
+EDF,7884,2.6071,25.02,2,239
+British Gas,6038,1.7233,32.84,4,261
+PlugShare,5562,4.0651,22.18,3,400
+OVO Energy,4758,2.5925,29.61,4,374
+Octopus Energy,4675,3.3639,28.2,4,213
+Shell,4404,3.5413,20.84,3,241
+Electrify America,2864,2.596,35.23,4,264
+Tesla,2058,3.1929,41.59,4,496
+Zapmap,1653,3.1924,28.6,3,462
+Octopus Electroverse,1421,3.6657,34.51,4,300
+IONITY,595,2.5227,32.0,4,479
+Pod Point,494,1.587,55.99,5,338
+E.ON Next Home,267,1.8577,47.64,5,233
+E.ON Myline,241,1.6846,23.48,5,160
+Fastned,187,3.6471,24.73,5,93
+Vattenfall InCharge,116,1.9569,34.89,5,171

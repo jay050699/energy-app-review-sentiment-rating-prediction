@@ -1,9 +1,20 @@
-app_name,app_id,category,country,notes
-Octopus Electroverse,energy.octopus.electricjuice.android,EV Charging / Energy Mobility,gb,Strong EV charging app from Octopus Energy
-E.ON Next Home,com.eonnext.home.eu,Energy Supplier Digital Service,gb,Official E.ON Next home energy app
-E.ON Myline,ro.eon.myline,Energy Supplier Digital Service,ro,Official E.ON digital service app found in search results
-PlugShare,com.xatori.Plugshare,EV Charging / Mobility,gb,Large EV charging map and charging station review app
-Shell,com.shell.sitibv.retail,Energy / Mobility,gb,Broad Shell app; check whether reviews are energy or mobility related
-ScottishPower,uk.co.scottishpower,Energy Supplier Digital Service,gb,Energy supplier app found in search results
-Hive,uk.co.centrica.hive,Smart Energy / Home Energy,gb,Centrica smart home and energy-related app
-Vattenfall InCharge,nl.nuon.laadpunten,EV Charging / Energy Mobility,nl,Vattenfall EV charging app
+app_name,app_id,category,country,google_app_id,apple_app_id,preferred_country
+Octopus Electroverse,energy.octopus.electricjuice.android,EV Charging / Energy Mobility,gb,energy.octopus.electricjuice.android,1535444463,gb
+E.ON Next Home,com.eonnext.home.eu,Energy Supplier Digital Service,gb,com.eonnext.home.eu,6479022825,gb
+E.ON Myline,ro.eon.myline,Energy Supplier Digital Service,ro,ro.eon.myline,1132146380,ro
+PlugShare,com.xatori.Plugshare,EV Charging / Mobility,us,com.xatori.Plugshare,421788217,us
+Shell,com.shell.sitibv.retail,Energy / Mobility,gb,com.shell.sitibv.retail,1464649113,gb
+ScottishPower,uk.co.scottishpower,Energy Supplier Digital Service,gb,uk.co.scottishpower,562202559,gb
+Hive,uk.co.centrica.hive,Smart Energy / Home Energy,gb,uk.co.centrica.hive,712829172,gb
+Vattenfall InCharge,nl.nuon.laadpunten,EV Charging / Energy Mobility,nl,nl.nuon.laadpunten,885790133,nl
+Octopus Energy,energy.octopus.octopusenergy.android,Energy Supplier Digital Service,gb,energy.octopus.octopusenergy.android,1093452209,gb
+EDF,com.edf.mobile,Energy Supplier Digital Service,gb,com.edf.mobile,404849554,gb
+OVO Energy,com.ovo.energy,Energy Supplier Digital Service,gb,com.ovo.energy,626316021,gb
+British Gas,uk.co.britishgas.bgmobilenep,Energy Supplier Digital Service,gb,uk.co.britishgas.bgmobilenep,6444313203,gb
+ChargePoint,com.coulombtech,EV Charging / Mobility,us,com.coulombtech,356866743,us
+Electrify America,com.ea.evowner,EV Charging / Mobility,us,com.ea.evowner,1458030456,us
+Zapmap,com.zapmap.zapmap,EV Charging / Mobility,gb,com.zapmap.zapmap,964082746,gb
+IONITY,com.cleevio.ionity.android.app,EV Charging / Mobility,gb,com.cleevio.ionity.android.app,1551448692,gb
+Fastned,nl.fastned.my,EV Charging / Mobility,nl,nl.fastned.my,1485702761,nl
+Pod Point,com.podpoint,EV Charging / Mobility,gb,com.podpoint,996063316,gb
+Tesla,com.teslamotors.tesla,EV Charging / Smart Energy,us,com.teslamotors.tesla,582007913,us

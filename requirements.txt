@@ -10,3 +10,5 @@ jupyter
 ipykernel
 kaggle
 google-play-scraper
+requests
+langdetect

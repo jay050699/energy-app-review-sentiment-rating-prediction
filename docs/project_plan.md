@@ -1,109 +1,33 @@
-# Project Plan
-
-## Project Title
-
-NLP Sentiment Analysis and Rating Prediction
+# Project plan
 
 ## Objective
 
-The objective of this project is to build an end-to-end NLP machine learning pipeline that uses customer review text to predict sentiment and rating.
+Explore what text analytics can learn from energy-app customer feedback by classifying review sentiment and predicting the reviewer's 1–5 star rating.
 
-The project will include two related tasks:
+## Scope
 
-1. Sentiment classification
-2. Rating prediction
+- Data: English-language public app-store reviews from 19 energy-related applications.
+- Outputs: reusable Python scripts, exploration/feature notebooks, model evaluation, report CSVs, figures, and Excel summary.
+- Tasks: three-class sentiment proxy from star ratings and five-class rating prediction.
 
-## Main Workflow
+## Method
 
-The project follows this workflow:
+1. Retrieve Google Play and Apple App Store reviews and associated metadata.
+2. Filter unusable and uncertain-language content and deduplicate records.
+3. Prepare cleaned review text and rating-derived sentiment labels.
+4. Explore rating balance, app coverage, review lengths, and common terms.
+5. Build a shared text-group-aware training/validation/test split.
+6. Compare candidate pipelines on validation Macro F1; refit the selected models and evaluate once on held-out test data.
+7. Save reusable models locally, publish aggregate evaluation reports and reproducible code.
 
-1. Select and download a review dataset
-2. Load the raw dataset
-3. Inspect dataset columns and missing values
-4. Clean the dataset
-5. Create sentiment labels from ratings
-6. Explore review and rating patterns
-7. Preprocess review text
-8. Convert text into numerical features
-9. Train machine learning models
-10. Evaluate model performance
-11. Compare models
-12. Save trained models
-13. Create a prediction script
-14. Document results in README
+## Current verified run
 
-## Dataset Requirement
+- Raw reviews: **71,067**
+- Cleaned reviews: **70,994**
+- Train / validation / test: **42,596 / 14,199 / 14,199**
+- Sentiment model: **TF-IDF + LinearSVC**, accuracy **0.8083**, Macro F1 **0.6583**.
+- Rating model: **CountVectorizer + Naive Bayes**, accuracy **0.6766**, Macro F1 **0.4800**, MAE **0.5650**.
 
-The dataset should contain at least:
+## Limitations
 
-- Review text
-- Rating score or sentiment label
-
-Preferred columns:
-
-- review_text
-- rating
-- date
-- product/business/category name
-
-## Planned Feature Extraction Methods
-
-### CountVectorizer
-
-CountVectorizer converts text into word-count features.
-
-It is simple, interpretable, and works well with Naive Bayes.
-
-### TF-IDF Vectorizer
-
-TF-IDF gives higher importance to meaningful words and lower importance to very common words.
-
-It often works well with Logistic Regression.
-
-## Planned Models
-
-### Multinomial Naive Bayes
-
-This model is commonly used for text classification and is fast to train.
-
-### Logistic Regression
-
-This model is a strong baseline for text classification and works well with sparse TF-IDF features.
-
-## Planned Evaluation Metrics
-
-The project will use:
-
-- Accuracy
-- Precision
-- Recall
-- F1-score
-- Confusion matrix
-
-## Expected Final Outputs
-
-The final project will include:
-
-- Cleaned dataset
-- EDA notebook
-- Text preprocessing notebook
-- Model training notebook
-- Reusable Python scripts
-- Saved model files
-- Evaluation results
-- Confusion matrix plots
-- README documentation
-
-
-
-# Final Project Conclusion
-
-This project developed an end-to-end NLP pipeline for analyzing customer reviews from energy-sector mobile applications.
-
-The sentiment classification task showed strong performance for positive and negative reviews. The final tuned sentiment model, CountVectorizer + Naive Bayes with alpha = 0.5, achieved an accuracy of 0.8013 and a macro F1-score of 0.6203.
-
-The rating prediction task was more challenging because the model had to predict exact 1-to-5 star ratings. The final tuned rating model, CountVectorizer + Logistic Regression with balanced class weights, achieved an accuracy of 0.6466, macro F1-score of 0.4302, and Mean Absolute Error of 0.7296.
-
-The results show that sentiment classification is more reliable than exact rating prediction for this dataset. This is mainly because public app reviews are highly polarized, with many 1-star and 5-star reviews and fewer middle-rating examples.
-
-Overall, the project demonstrates how classical NLP and machine learning methods can be used to analyze energy-sector customer feedback, identify common satisfaction and complaint patterns, and support customer experience monitoring.
+Sentiment comes from ratings rather than independent annotations. App-store reviewers are not a representative sample. Identical-text grouping prevents only exact normalized review overlap, not all semantic near-duplicates. The work is an independent ML demonstration, not a deployed production system.

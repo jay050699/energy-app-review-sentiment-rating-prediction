@@ -1,81 +1,36 @@
-# Dataset Notes
+# Dataset notes
 
-## Final Dataset Choice
+## Source and scope
 
-The final dataset used in this project is a custom-collected public Google Play review dataset from energy-sector mobile apps.
+The dataset contains publicly available Google Play and Apple App Store reviews for 19 energy-related applications, covering utilities, EV charging, mobility, and smart-home energy services. Reviews are retrieved across multiple storefronts, with language acceptance based on review text rather than country alone.
 
-The dataset focuses on customer reviews from apps related to:
+## Quality controls
 
-- Energy supplier digital services
-- EV charging and mobility
-- Smart energy and home energy services
+- Raw English-filtered dataset: **71,067** reviews, 17 columns.
+- English confidence threshold: **0.92** (language detection is approximate; short/ambiguous texts can still be misclassified).
+- Collector minimum text length: **5 words** for language evaluation.
+- Stable review IDs used for deduplication within each app/platform across storefronts.
+- During preprocessing, **72 rows** belonging to same-app identical-text, conflicting-rating groups were excluded; **one** cleaned review was empty and excluded.
+- Final modeling dataset: **70,994** reviews from 19 applications.
+- Raw platform counts: Google Play **60,839**; Apple App Store **10,228**.
 
-## Project Dataset Name
+## Labels
 
-Energy App Reviews Dataset
+1–2 stars → Negative; 3 stars → Neutral; 4–5 stars → Positive. This is a **rating-derived proxy**, not independently annotated sentiment ground truth.
 
-## Data Source
+## Final rating counts (processed)
 
-The review data is collected from public Google Play Store app reviews using the `google-play-scraper` Python package.
+| Rating | Count |
+| --- | --- |
+| 1 | 29951 |
+| 2 | 6383 |
+| 3 | 5539 |
+| 4 | 6354 |
+| 5 | 22767 |
 
-## Selected Apps
+## Data access and reproducibility
 
-| App Name | Category |
-|---|---|
-| Octopus Electroverse | EV Charging / Energy Mobility |
-| E.ON Next Home | Energy Supplier Digital Service |
-| E.ON Myline | Energy Supplier Digital Service |
-| PlugShare | EV Charging / Mobility |
-| Shell | Energy / Mobility |
-| ScottishPower | Energy Supplier Digital Service |
-| Hive | Smart Energy / Home Energy |
-| Vattenfall InCharge | EV Charging / Energy Mobility |
-
-## Dataset Columns
-
-| Column | Description |
-|---|---|
-| app_name | Name of the mobile application |
-| app_id | Google Play app package ID |
-| category | Energy-sector category |
-| country | Country used for review collection |
-| review_text | Written user review |
-| rating | Star rating from 1 to 5 |
-| review_date | Review timestamp |
-| thumbs_up_count | Number of helpful votes |
-| app_version | App version associated with the review, if available |
-
-## Target Variables
-
-This project uses the rating column in two ways:
-
-### Sentiment Classification
-
-Ratings are mapped into sentiment classes:
-
-| Rating | Sentiment |
-|---|---|
-| 1, 2 | Negative |
-| 3 | Neutral |
-| 4, 5 | Positive |
-
-### Rating Prediction
-
-The project also predicts the original 1 to 5 star rating.
-
-## Dataset Limitations
-
-- The dataset represents app users only, not all energy customers.
-- Reviews are public Google Play reviews and may be biased toward very positive or very negative experiences.
-- Some apps have fewer available reviews than others.
-- Some app reviews may discuss app usability rather than the full energy service experience.
-- Star ratings are used as proxy labels for sentiment.
-
-## Reproducibility
-
-The raw dataset is not committed to GitHub because raw review data can be large and source-dependent.
-
-The dataset can be recreated by running:
-
-```bash
-python src/collect_reviews.py
+- `data/raw/energy_app_reviews_raw.csv` and `data/processed/energy_app_reviews_cleaned.csv` are generated locally and not tracked in Git.
+- `src/collect_reviews.py` collects and filters review candidates; `src/preprocessing.py` creates the modeling dataset.
+- Collection is a snapshot of public app-store availability. Subsequent collection may produce different content and counts.
+- The complete source review text should not be redistributed as a public repo dataset without checking applicable terms and rights.

@@ -1,3 +1,3 @@
-feature_method,train_rows,test_rows,number_of_features,ngram_range,max_features,min_df,max_df
-CountVectorizer,2456,614,2318,1 to 2,5000,3,0.9
-TF-IDF,2456,614,2318,1 to 2,5000,3,0.9
+feature_method,train_rows,test_rows,number_of_features,ngram_range,max_features,min_df,max_df,validation_rows,task,analyzer
+CountVectorizer,42596,14199,5000,1 to 2,5000,3,0.9,14199,rating,word
+TF-IDF,42596,14199,10000,1 to 2,10000,2,0.95,14199,sentiment,word

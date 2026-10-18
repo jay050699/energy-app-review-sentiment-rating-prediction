@@ -1,4 +1,5 @@
 stage,selection_criterion,model_name,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,mean_absolute_error,best_params,comment
-Baseline,Reference baseline,CountVectorizer + Naive Bayes,0.6596,0.3805,0.3606,0.3504,0.6122,0.8104,Default settings,Simple baseline model for exact rating prediction.
-Tuned,Previous selected model,CountVectorizer + Logistic Regression,0.6321,0.3978,0.3992,0.3978,0.6344,0.7115,"C = 1.0, class_weight = balanced",Previous final model before additional experiments.
-Final,"Best accuracy, weighted F1, and MAE",TF-IDF + LinearSVC,0.671,0.4081,0.3999,0.4008,0.6534,0.6645,"C = 1.0, class_weight = balanced",Selected because it reduced average star-rating error.
+Selected,Validation Macro F1,CountVectorizer + Naive Bayes,0.6729,0.4801,0.4701,0.4737,0.6615,0.568,MultinomialNB(),Selected by validation Macro F1; final metrics in final_model_summary.csv
+Candidate,Validation Macro F1,CountVectorizer + Logistic Regression,0.5915,0.4605,0.4688,0.4552,0.6225,0.636,"LogisticRegression(class_weight='balanced', max_iter=3000, random_state=42)","Validation-only metrics, not held-out test metrics"
+Candidate,Validation Macro F1,TF-IDF + LinearSVC,0.6534,0.4711,0.4722,0.4713,0.6562,0.5693,"LinearSVC(class_weight='balanced', random_state=42)","Validation-only metrics, not held-out test metrics"
+Candidate,Validation Macro F1,Character TF-IDF + Logistic Regression,0.5974,0.4761,0.4874,0.47,0.6314,0.6121,"LogisticRegression(class_weight='balanced', max_iter=3000, random_state=42)","Validation-only metrics, not held-out test metrics"

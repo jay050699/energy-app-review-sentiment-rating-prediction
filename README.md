@@ -1,583 +1,158 @@
 # Energy App Review Sentiment Analysis and Rating Prediction
 
-This project analyzes public Google Play reviews from energy-related mobile apps and uses classical NLP models to classify review sentiment and predict star ratings.
+**Not every useful signal in energy services comes from a sensor.** App reviews offer another view: what customers encounter while managing accounts, paying bills, or charging an EV.
 
-I chose energy supplier apps, EV charging apps, mobility apps, and smart home energy services because the reviews are usually very direct. Users often mention problems with login, payments, meter readings, charging sessions, updates, app crashes, and customer support. That makes the dataset useful for practicing text analytics on realistic customer feedback.
+I built this Python NLP project to work with that feedback. It collects public app-store reviews, prepares English-language text for machine learning, explores common terms, and trains models to predict sentiment and star ratings. The repository includes the collection and preprocessing code, experiment notebooks, evaluation reports, and a small command-line prediction demo.
 
-The project follows a complete machine learning workflow: collecting reviews, cleaning text, exploring review patterns, extracting NLP features, training baseline, tuned, and experiment models, comparing metrics, and saving the results in reports that can be reviewed later.
+## What the project predicts
 
----
+- **Sentiment classification:** Negative, Neutral, or Positive.
+- **Star-rating prediction:** The original rating, from 1 to 5.
 
-## What the project covers
-
-The project focuses on two prediction tasks:
-
-1. **Sentiment classification**  
-   Predict whether a review is negative, neutral, or positive.
-
-2. **Rating prediction**  
-   Predict the original 1-to-5 star rating from the review text.
-
-The sentiment task gives a quick view of customer mood. The rating task is harder because the model has to separate five rating classes, especially the middle ratings where the text is often less clear.
-
----
-
-## Why I built this
-
-Energy companies depend more and more on digital apps for customer-facing services such as account management, payments, meter readings, EV charging, and support. Public reviews can show where users are satisfied and where they repeatedly face issues.
-
-Instead of reading reviews one by one, this project turns review text into structured outputs:
-
-- sentiment labels
-- predicted star ratings
-- rating and sentiment distributions
-- common positive and negative terms
-- model comparison reports
-- reusable prediction scripts
-
-The goal was not only to train a model, but to organize the whole project in a way that is easy to review, reproduce, and explain.
-
----
-
-## Technical scope
-
-The project includes:
-
-- collecting public Google Play review data with Python
-- preparing an app shortlist for energy-related services
-- cleaning and preprocessing real-world review text
-- creating sentiment labels from star ratings
-- exploring rating and sentiment distributions
-- extracting features with CountVectorizer and TF-IDF
-- training Naive Bayes, Logistic Regression, and LinearSVC models
-- comparing baseline, tuned, and experiment models
-- evaluating models with Accuracy, Macro F1, Weighted F1, and MAE
-- saving reports, figures, and a summary Excel workbook
-- creating reusable scripts for collection, preprocessing, training, and prediction
-
----
+The sentiment classes are **derived from the reviewer's star rating**, not separately annotated: 1–2 stars = Negative, 3 stars = Neutral, and 4–5 stars = Positive. The tasks therefore measure how reliably text predicts rating-derived labels and ratings, not agreement with a human sentiment survey.
 
 ## Dataset
 
-The reviews were collected from public Google Play Store reviews using the `google-play-scraper` Python package.
+Reviews come from **Google Play and Apple's App Store**, across relevant country storefronts. Only reviews passing the English-language and text-quality checks were retained, regardless of storefront country.
 
-After preprocessing, the final dataset used for modeling contained:
+| Measure | Value |
+| --- | ---: |
+| Collected, English-filtered reviews | 71,067 |
+| Final preprocessed reviews | 70,994 |
+| Applications | 19 |
+| Google Play reviews (raw) | 60,839 |
+| Apple App Store reviews (raw) | 10,228 |
+| Average preprocessed rating | 2.80 / 5 |
+| Average review length | 29.26 words |
+| Negative reviews | 36,334 |
+| Neutral reviews | 5,539 |
+| Positive reviews | 29,121 |
 
-| Metric                    | Value |
-|---------------------------|-------|
-| Total reviews             | 3,084 |
-| Number of apps            | 8     |
-| Average rating            | 2.99  |
-| Average review word count | 22.56 |
-| Positive reviews          | 1,436 |
-| Negative reviews          | 1,440 |
-| Neutral reviews           | 208   |
+The applications cover energy suppliers, EV charging networks, mobility services, and smart-home energy products. The full **19-app** catalog, including platform IDs, is in [`config/energy_apps_shortlist.csv`](config/energy_apps_shortlist.csv). Selected examples include PlugShare, ChargePoint, Octopus Energy, ScottishPower, Hive, and EDF.
 
-Raw and processed datasets are not committed to the repository. They are created locally by running the data collection and preprocessing scripts.
+### How the reviews were prepared
 
----
+The collector retrieves written reviews and metadata, deduplicates review IDs across storefronts, and applies a minimum length and English-language confidence threshold. The preprocessing pipeline then cleans and normalizes the review text, removes unusable entries, and preserves negations that can change meaning (such as *not working*).
 
-## Apps included
+The raw dataset contains 71,067 accepted English-language records. During preprocessing, **72 reviews** were excluded from ambiguous same-app text groups that had different ratings, and **one** further record was excluded because its cleaned text was empty. This leaves **70,994** modeling records.
 
-The dataset includes reviews from apps related to energy supplier services, EV charging, energy mobility, and smart home energy.
+No user-generated review text or trained `.pkl` model is committed to the repository. Public store availability can change, so a fresh collection is not guaranteed to reproduce exactly the same data volume.
 
-| App                  | Type                            |
-|----------------------|---------------------------------|
-| Octopus Electroverse | EV charging / energy mobility   |
-| E.ON Myline          | Energy supplier digital service |
-| E.ON Next Home       | Energy supplier digital service |
-| PlugShare            | EV charging / mobility          |
-| Shell                | Energy / mobility               |
-| ScottishPower        | Energy supplier digital service |
-| Hive                 | Smart home / energy service     |
-| Vattenfall InCharge  | EV charging / energy mobility   |
+### Rating distribution
 
----
+![Distribution of 1–5 star ratings](reports/figures/rating_distribution.png)
 
-## Labeling approach
+Reviews concentrate at 1 and 5 stars. That imbalance is one reason we look at **Macro F1**, not just accuracy, particularly for neutral sentiment and middle ratings.
 
-The original 1-to-5 star ratings were mapped into sentiment labels for the sentiment classification task.
+## Modeling approach
 
-| Rating | Sentiment |
-|--------|-----------|
-| 1, 2   | Negative  |
-| 3      | Neutral   |
-| 4, 5   | Positive  |
+For a fair comparison, both prediction tasks use the **same train / validation / test split**. `StratifiedGroupKFold` groups identical normalized cleaned text so identical text cannot occur on both sides of a split. Model selection uses **validation Macro F1**; the selected model is refitted on training plus validation data and then scored on the untouched test set.
 
-For the rating prediction task, the model predicts the original star rating directly:
+| Partition | Reviews |
+| --- | ---: |
+| Training | 42,596 |
+| Validation | 14,199 |
+| Held-out test | 14,199 |
 
-- 1 star
-- 2 stars
-- 3 stars
-- 4 stars
-- 5 stars
+Candidates include word-count features, word-level TF-IDF, character-level TF-IDF, Multinomial Naive Bayes, Logistic Regression, and LinearSVC. The experiments and evaluation logic are in [`src/train.py`](src/train.py); Notebook 03 explains and verifies the saved results.
 
-Rating prediction is more difficult than sentiment classification because it requires the model to separate five rating levels instead of three broader sentiment groups.
+## Validation-set model comparisons
 
----
+These scores were used to select the models. **They are not test-set results.**
 
-## Workflow
+### Sentiment candidates
 
-The project follows this workflow:
+| Stage | Model | Accuracy | Macro F1 | Weighted F1 |
+| --- | --- | --- | --- | --- |
+| Baseline | CountVectorizer + Naive Bayes | 0.8067 | 0.6645 | 0.8104 |
+| Candidate | CountVectorizer + Tuned Naive Bayes | 0.8062 | 0.6644 | 0.8103 |
+| Candidate | Character TF-IDF + Logistic Regression | 0.7546 | 0.6522 | 0.7877 |
+| Selected | TF-IDF + LinearSVC | 0.8176 | 0.6672 | 0.8200 |
 
-1. Select energy-related mobile apps.
-2. Collect public Google Play reviews.
-3. Check the collected dataset.
-4. Clean and preprocess review text.
-5. Create sentiment labels from star ratings.
-6. Explore rating and sentiment distributions.
-7. Analyze frequent positive and negative words.
-8. Extract features using CountVectorizer and TF-IDF.
-9. Train baseline models.
-10. Tune selected models.
-11. Compare model results.
-12. Save reports, figures, and classification summaries.
-13. Build reusable scripts for training and prediction.
-14. Prepare the repository for GitHub review.
+### Rating candidates
 
----
+| Stage | Model | Accuracy | Macro F1 | Weighted F1 | MAE |
+| --- | --- | --- | --- | --- | --- |
+| Selected | CountVectorizer + Naive Bayes | 0.6729 | 0.4737 | 0.6615 | 0.5680 |
+| Candidate | CountVectorizer + Logistic Regression | 0.5915 | 0.4552 | 0.6225 | 0.6360 |
+| Candidate | TF-IDF + LinearSVC | 0.6534 | 0.4713 | 0.6562 | 0.5693 |
+| Candidate | Character TF-IDF + Logistic Regression | 0.5974 | 0.4700 | 0.6314 | 0.6121 |
 
-## Text preprocessing
+## Final results — held-out test set
 
-The preprocessing pipeline includes:
+| Task | Selected model | Accuracy | Macro F1 | Weighted F1 | MAE (stars) |
+| --- | --- | --- | --- | --- | --- |
+| sentiment | TF-IDF + LinearSVC | 0.8083 | 0.6583 | 0.8140 | — |
+| rating | CountVectorizer + Naive Bayes | 0.6766 | 0.4800 | 0.6651 | 0.5650 |
 
-- lowercasing
-- URL removal
-- special character removal
-- extra whitespace cleanup
-- stopword removal
-- lemmatization
-- duplicate review removal
-- empty cleaned-text filtering
+The selected sentiment model is **TF-IDF + LinearSVC**. Its test-set accuracy is **80.83%**, with a Macro F1 of **0.6583**.
 
-Both the original review text and cleaned review text are preserved during the workflow, so the cleaning process can be checked later.
+The selected rating model is **CountVectorizer + Naive Bayes**. It achieved **67.66%** exact-rating accuracy and **0.565 stars** in mean absolute error. **85.9%** of test predictions were within one star of the original rating.
 
----
+An accuracy figure alone would miss some of the difficulty with the smaller middle-rating classes. MAE is helpful for the ordered rating task: a prediction of 4 instead of 5 is a smaller error than a prediction of 1 instead of 5.
 
-## Feature extraction
+### Where the models struggle
 
-Two feature extraction methods were used.
+![Sentiment confusion matrix](reports/figures/confusion_matrix_final_sentiment_model.png)
 
-| Method          | Why it was used                                                             |
-|-----------------|-----------------------------------------------------------------------------|
-| CountVectorizer | Simple, interpretable, and strong for baseline text classification          |
-| TF-IDF          | Useful for weighting terms based on their importance across the dataset     |
+![Rating confusion matrix](reports/figures/confusion_matrix_final_rating_model.png)
 
-Both methods used unigrams and bigrams so the models could learn from single words as well as short phrases.
+The models generally find more clear-cut positive and negative language easier than mixed reviews. This is a practical limitation of text-based rating estimation, not something the aggregate accuracy resolves.
 
-Examples of useful phrases:
+## Review language and customer feedback
 
-- charging station
-- not working
-- customer service
-- easy use
-- payment issue
+![Common words in negative reviews](reports/figures/top_negative_words.png)
 
----
+![Common words in positive reviews](reports/figures/top_positive_words.png)
 
-## Models used
+Word-frequency patterns can provide a quick starting point for exploring recurring topics such as charging, updates, logins, and payments. They are **descriptive signals**, not a verified root-cause analysis or a separate issue-detection classifier.
 
-The project uses classical machine learning models from scikit-learn.
+## Run locally
 
-| Model                   | Why it was used                                                         |
-|-------------------------|-------------------------------------------------------------------------|
-| Multinomial Naive Bayes | Fast and reliable baseline for text classification                      |
-| Logistic Regression     | Strong linear model for sparse text features                            |
-| LinearSVC               | Strong margin-based classifier often effective for TF-IDF text features |
-
-The models are built using scikit-learn pipelines, where vectorization and classification are handled together.
-
----
-
-## Exploratory analysis
-
-The review dataset is strongly polarized. Many reviews are clearly positive or clearly negative, while neutral and middle-rating reviews are less common.
-
-Common positive terms included:
-
-- easy
-- good
-- great
-- charging
-- charger
-- work
-- service
-- excellent
-
-Common negative terms included:
-
-- work
-- update
-- time
-- charging
-- useless
-- card
-- issue
-- account
-
-A clear pattern is that negative reviews often contain more detailed problem descriptions, especially around login issues, app updates, failed payments, charging sessions, and app reliability.
-
----
-
-## Evaluation metrics
-
-Different metrics were used because accuracy alone can be misleading on imbalanced data.
-
-| Metric      | Why it matters                                           |
-|-------------|----------------------------------------------------------|
-| Accuracy    | Shows the overall percentage of correct predictions      |
-| Macro F1    | Gives equal importance to each class                     |
-| Weighted F1 | Accounts for class imbalance                             |
-| MAE         | Measures average rating error for the 1-to-5 rating task |
-
-Macro F1 was especially important because neutral reviews and middle ratings had fewer examples.
-
----
-
-## Sentiment classification results
-
-The final sentiment model was selected after comparing baseline, tuned, and additional experiment models.
-
-| Stage          | Model                                  | Accuracy | Macro F1 | Weighted F1 |
-|----------------|----------------------------------------|----------|----------|-------------|
-| Baseline       | CountVectorizer + Naive Bayes          | 0.8039   | 0.5946   | 0.7853      |
-| Previous tuned | CountVectorizer + Naive Bayes          | 0.7974   | 0.5983   | 0.7842      |
-| Final          | Character TF-IDF + Logistic Regression | 0.7925   | 0.6322   | 0.7963      |
-
-Final selected sentiment model:
-
-| Component      | Value               | 
-|----------------|---------------------|
-| Feature method | Character TF-IDF    |
-| Analyzer       | `char_wb`           |
-| N-gram range   | 3 to 5              |
-| Model          | Logistic Regression |
-| Class weight   | balanced            |
-
-The CountVectorizer + Naive Bayes baseline produced the highest accuracy, but the Character TF-IDF + Logistic Regression model gave better Macro F1 and Weighted F1. I selected the Character TF-IDF model because the dataset is imbalanced, and a small drop in accuracy was acceptable for better class-balanced performance.
-
-Character-level TF-IDF also helps with short app reviews, spelling variations, and repeated issue patterns that may not always appear as clean full words.
-
-The final sentiment model performs well on clearly positive and clearly negative reviews. Neutral reviews remain more difficult because there are fewer neutral examples and many neutral reviews contain mixed feedback.
-
----
-
-## Rating prediction results
-
-The final rating model was selected after comparing baseline, tuned, and additional experiment models.
-
-| Stage          | Model                                 | Accuracy | Macro F1 | Weighted F1 | MAE    |
-|----------------|---------------------------------------|----------|----------|-------------|--------|
-| Baseline       | CountVectorizer + Naive Bayes         | 0.6596   | 0.3504   | 0.6122      | 0.8104 |
-| Previous tuned | CountVectorizer + Logistic Regression | 0.6321   | 0.3978   | 0.6344      | 0.7115 |
-| Final          | TF-IDF + LinearSVC                    | 0.6710   | 0.4008   | 0.6534      | 0.6645 |
-
-Final selected rating model:
-
-| Component      | Value               |
-|----------------|---------------------|
-| Feature method | TF-IDF              |
-| Model          | LinearSVC           |
-| C              | 1.0                 |
-| Class weight   | balanced            |
-
-The TF-IDF + LinearSVC model was selected as the final rating model because it achieved the best accuracy, Weighted F1, and MAE among the tested models. The MAE improvement is important because star ratings are ordered: predicting 4 instead of 5 is a smaller error than predicting 1 instead of 5.
-
-Rating prediction is still harder than sentiment classification because the model has to separate five rating levels. The model performs better on clear 1-star and 5-star reviews, while 2-star, 3-star, and 4-star reviews are more difficult because they are less frequent and often less clearly worded.
-
----
-
-## Main findings
-
-- Classical NLP models can separate positive and negative reviews reasonably well.
-- Neutral reviews are harder to classify because they are less frequent and often contain mixed language.
-- Exact star-rating prediction is harder than sentiment classification.
-- Middle ratings are more difficult to predict than extreme ratings.
-- Character-level TF-IDF improved the sentiment model by increasing Macro F1 and Weighted F1.
-- TF-IDF + LinearSVC improved rating prediction by reducing average rating error.
-- Negative reviews often contain more specific issue-related terms than positive reviews.
----
-
-## Limitations
-
-This project has some limitations:
-
-- The dataset represents public mobile app reviewers only, not all customers.
-- Reviews are highly polarized toward 1-star and 5-star ratings.
-- Neutral and middle-rating classes are underrepresented.
-- Some reviews discuss app usability rather than the full energy service experience.
-- Star ratings are used as proxy labels for sentiment.
-- Google Play reviews can change over time, so future data collection may produce slightly different results.
-- The project uses classical machine learning models, not transformer-based language models.
-
-These limitations are expected for a lightweight, reproducible NLP project built with public review data.
-
----
-
-## Possible improvements
-
-I would try the following improvements in a next version:
-
-- Tune LinearSVC and Logistic Regression hyperparameters more deeply.
-- Compare word-level TF-IDF, character-level TF-IDF, and combined feature pipelines.
-- Tune vectorizer settings such as `max_features`, `min_df`, `max_df`, and n-gram range.
-- Collect more reviews to improve neutral and middle-rating classes.
-- Treat rating prediction as an ordinal classification problem instead of a standard multi-class task.
-- Compare the classical ML pipeline with a small transformer-based model.
-
-I kept the current version focused on classical machine learning because it is easier to reproduce, faster to run, and more interpretable for a first complete NLP workflow.
-
----
-
-## Repository contents
-
-| Folder/File        | Purpose                                                                    |
-|--------------------|----------------------------------------------------------------------------|
-| `config/`          | App shortlist used for review collection                                   |
-| `data/`            | Placeholder folders for raw and processed local data                       |
-| `docs/`            | Project plan and dataset notes                                             |
-| `notebooks/`       | Step-by-step exploration, preprocessing, and modeling notebooks            |
-| `reports/`         | CSV reports, figures, and Excel summary workbook                           |
-| `src/`             | Reusable Python scripts                                                    |
-| `models/`          | Placeholder folder for locally generated trained models                    |
-| `README.md`        | Main project documentation                                                 |
-| `requirements.txt` | Python dependencies                                                        |
-| `config.yaml`      | Project configuration                                                      |
-| `.gitignore`       | Excludes generated datasets, models, cache files, and virtual environments |
-| `experiments/`     | Additional model comparison experiments                                    |
-
----
-
-## Project structure
-
-```
-energy-app-review-sentiment-rating-prediction/
-│
-├── config/
-│   └── energy_apps_shortlist.csv
-│
-├── data/
-│   ├── raw/
-│   │   └── .gitkeep
-│   └── processed/
-│       └── .gitkeep
-│
-├── docs/
-│   ├── dataset_notes.md
-│   └── project_plan.md
-│
-├── experiments/
-│   └── model_improvement_experiments.py
-│
-├── notebooks/
-│   ├── 01_data_exploration.ipynb
-│   ├── 02_text_preprocessing.ipynb
-│   └── 03_model_training_evaluation.ipynb
-│
-├── reports/
-│   ├── excel/
-│   │   └── energy_app_review_project_summary.xlsx
-│   ├── figures/
-│   ├── average_rating_by_app.csv
-│   ├── classification_report_final_rating_model.csv
-│   ├── classification_report_final_sentiment_model.csv
-│   ├── eda_summary.csv
-│   ├── feature_extraction_summary.csv
-│   ├── final_baseline_vs_tuned_model_comparison.csv
-│   ├── final_dataset_summary.csv
-│   ├── final_rating_baseline_vs_tuned_comparison.csv
-│   ├── preprocessing_summary.csv
-│   ├── rating_distribution.csv
-│   ├── rating_model_results.csv
-│   ├── rating_model_tuning_results.csv
-│   ├── sentiment_distribution.csv
-│   ├── sentiment_model_results.csv
-│   ├── sentiment_model_tuning_results.csv
-│   ├── top_countvectorizer_features.csv
-│   ├── top_negative_words.csv
-│   ├── top_positive_words.csv
-│   ├── top_tfidf_features.csv
-│   ├── final_model_summary.csv
-│   └── model_improvement_experiments.csv
-│
-├── src/
-│   ├── __init__.py
-│   ├── collect_reviews.py
-│   ├── data_loader.py
-│   ├── evaluate.py
-│   ├── preprocessing.py
-│   ├── train.py
-│   └── predict.py
-│
-├── models/
-│   └── .gitkeep
-│
-├── config.yaml
-├── README.md
-├── requirements.txt
-└── .gitignore
-```
-
----
-
-## How to run the project
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/jay050699/energy-app-review-sentiment-rating-prediction.git
-cd energy-app-review-sentiment-rating-prediction
-```
-
-### 2. Create a virtual environment
-
-```bash
-python -m venv .venv
-```
-
-Activate it on Windows:
+Use Python 3.10+ and the dependencies in `requirements.txt`. On Windows PowerShell:
 
 ```powershell
-.venv\Scripts\activate
+git clone https://github.com/jay050699/energy-app-review-sentiment-rating-prediction.git
+cd energy-app-review-sentiment-rating-prediction
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 ```
 
-Activate it on macOS/Linux:
+The pipeline can be run from the repository root:
 
-```bash
-source .venv/bin/activate
-```
-
-### 3. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 4. Collect public Google Play reviews
-
-```bash
+```powershell
 python src/collect_reviews.py
-```
-
-This creates the raw dataset locally:
-
-```
-data/raw/energy_app_reviews_raw.csv
-```
-
-The raw dataset is not committed to GitHub because it can be recreated using the collection script.
-
-### 5. Preprocess the review dataset
-
-```bash
 python src/preprocessing.py
-```
-
-This creates the cleaned dataset locally:
-
-```
-data/processed/energy_app_reviews_cleaned.csv
-```
-
-### 6. Train the final models
-
-```bash
 python src/train.py
-```
-
-This trains and saves the final models locally:
-
-```
-models/final_sentiment_model.pkl
-models/final_rating_model.pkl
-```
-
-It also creates final reports in the `reports/` folder.
-
-### 7. Run prediction examples
-
-Run the default examples:
-
-```bash
 python src/predict.py
-```
-
-Run prediction on custom review text:
-
-```bash
 python src/predict.py --text "The app keeps crashing and I cannot submit my meter reading."
 ```
 
-Example output:
+The review collector can take considerable time; it uses cached collection results where available, and accessible review counts may vary by store and date. The notebooks are ordered `01_data_exploration.ipynb` → `02_text_preprocessing.ipynb` → `03_model_training_evaluation.ipynb`. Notebook 03 inspects saved models; it does not retrain them.
 
-```
-Predicted sentiment : Negative
-Predicted rating    : 1
-```
+## Repository contents
 
-### 8. Run notebooks
+| Path | Purpose |
+| --- | --- |
+| `config/` | Energy-app list and platform IDs |
+| `data/` | Local raw and preprocessed data placeholders; datasets excluded from Git |
+| `docs/` | Dataset notes and project plan |
+| `notebooks/` | Data exploration, feature extraction, evaluation |
+| `reports/` | CSV summaries, confusion matrices, charts, and Excel summary |
+| `models/` | Locally generated fitted models, excluded from Git |
+| `src/` | Reusable collection, preprocessing, training, and prediction code |
+| `requirements.txt` | Python dependencies |
 
-The notebooks can be run in this order:
+The summary workbook is available in [`reports/excel/energy_app_review_project_summary.xlsx`](reports/excel/energy_app_review_project_summary.xlsx).
 
-```
-01_data_exploration.ipynb
-02_text_preprocessing.ipynb
-03_model_training_evaluation.ipynb
-```
+## Limitations and next steps
 
----
+- Reviews are self-selected, not a representative sample of all customers.
+- Sentiment labels are derived from star ratings, not independently labeled by people.
+- Normalized-text grouping prevents exact duplicate leakage, but not every near-duplicate or paraphrase.
+- Some comments describe the broader service experience rather than just app behavior.
+- Store review availability and language-detection accuracy may change over time.
+- Future extensions could include stronger neutral/middle-class coverage, ordinal rating models, multilingual analysis, and evaluation on held-out applications or more recent reviews.
 
-## Reports
-
-The `reports/` folder contains:
-
-- dataset summaries
-- sentiment and rating distributions
-- average rating by app
-- feature extraction summaries
-- model comparison results
-- final classification reports
-- figures
-- Excel summary workbook
-
-The Excel workbook provides a quick business-friendly summary of the project.
-
----
-
-## Data and model files
-
-Raw data, processed data, and trained model files are not committed to GitHub.
-
-They are created locally when the scripts are run:
-
-```bash
-python src/collect_reviews.py
-python src/preprocessing.py
-python src/train.py
-```
-
-This keeps the repository lightweight and avoids committing generated files that can be reproduced.
-
----
-
-## Tools and libraries
-
-- Python
-- Pandas
-- NumPy
-- Scikit-learn
-- NLTK
-- Matplotlib
-- Google Play Scraper
-- Joblib
-- Jupyter Notebook
-- Git
-- GitHub
-
----
-
-## Final note
-
-This project is a practical NLP project built around real public review text. It is intentionally kept lightweight and reproducible, using classical machine learning models instead of heavier deep learning models.
-
-The main purpose was to build a complete, reviewable workflow: from collecting raw text to producing model results, reports, figures, and reusable prediction scripts.
+This is an independent demonstration project using publicly available app reviews, not an official company dataset or deployed service.

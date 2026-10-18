@@ -1,12 +1,9 @@
-task,model,accuracy,macro_f1,weighted_f1,mae
-sentiment,Current config - CountVectorizer + MultinomialNB,0.7974068071312804,0.5982922959848319,0.7841722717336794,
-sentiment,TF-IDF + LinearSVC,0.8006482982171799,0.5908813342505098,0.7874805753755231,
-sentiment,CountVectorizer + LinearSVC,0.8038897893030794,0.5932048603049299,0.7894297436723376,
-sentiment,TF-IDF + ComplementNB,0.8038897893030794,0.5707346030450439,0.7822308302049054,
-sentiment,Character TF-IDF + LogisticRegression,0.7925445705024311,0.6321976122534559,0.7962864930693746,
-rating,Current config - CountVectorizer + LogisticRegression,0.6320907617504052,0.397760734874686,0.6343636758755471,0.7115072933549432
-rating,TF-IDF + LinearSVC,0.6709886547811994,0.40081889361626855,0.653352556947049,0.6645056726094003
-rating,CountVectorizer + LinearSVC,0.640194489465154,0.3881710793532699,0.6289578631728989,0.7406807131280388
-rating,TF-IDF + LogisticRegression,0.6256077795786061,0.40074353925052897,0.635921972084357,0.7147487844408428
-rating,Character TF-IDF + LogisticRegression,0.6077795786061588,0.4080119410720798,0.6283071092275333,0.7082658022690438
-rating,CountVectorizer + ComplementNB,0.6564019448946515,0.3486248862058027,0.6132988106234245,0.7828200972447326
+task,evaluation_set,stage,selection_criterion,model_name,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,mean_absolute_error,best_params,comment
+sentiment,validation,Baseline,Validation Macro F1,CountVectorizer + Naive Bayes,0.8067,0.6638,0.6669,0.6645,0.8104,,MultinomialNB(),"Validation-only metrics, not held-out test metrics"
+sentiment,validation,Candidate,Validation Macro F1,CountVectorizer + Tuned Naive Bayes,0.8062,0.6636,0.6672,0.6644,0.8103,,MultinomialNB(alpha=0.5),"Validation-only metrics, not held-out test metrics"
+sentiment,validation,Candidate,Validation Macro F1,Character TF-IDF + Logistic Regression,0.7546,0.6644,0.6936,0.6522,0.7877,,"LogisticRegression(class_weight='balanced', max_iter=3000, random_state=42)","Validation-only metrics, not held-out test metrics"
+sentiment,validation,Selected,Validation Macro F1,TF-IDF + LinearSVC,0.8176,0.6668,0.6683,0.6672,0.82,,"LinearSVC(class_weight='balanced', random_state=42)",Selected by validation Macro F1; final metrics in final_model_summary.csv
+rating,validation,Selected,Validation Macro F1,CountVectorizer + Naive Bayes,0.6729,0.4801,0.4701,0.4737,0.6615,0.568,MultinomialNB(),Selected by validation Macro F1; final metrics in final_model_summary.csv
+rating,validation,Candidate,Validation Macro F1,CountVectorizer + Logistic Regression,0.5915,0.4605,0.4688,0.4552,0.6225,0.636,"LogisticRegression(class_weight='balanced', max_iter=3000, random_state=42)","Validation-only metrics, not held-out test metrics"
+rating,validation,Candidate,Validation Macro F1,TF-IDF + LinearSVC,0.6534,0.4711,0.4722,0.4713,0.6562,0.5693,"LinearSVC(class_weight='balanced', random_state=42)","Validation-only metrics, not held-out test metrics"
+rating,validation,Candidate,Validation Macro F1,Character TF-IDF + Logistic Regression,0.5974,0.4761,0.4874,0.47,0.6314,0.6121,"LogisticRegression(class_weight='balanced', max_iter=3000, random_state=42)","Validation-only metrics, not held-out test metrics"
