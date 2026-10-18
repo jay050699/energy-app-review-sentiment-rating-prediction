@@ -13,6 +13,8 @@ The sentiment classes are **derived from the reviewer's star rating**, not separ
 
 ## Dataset
 
+**Development in brief:** I initially tested the collection and NLP pipeline on approximately 3,000 processed reviews from 8 apps. I then expanded the same project to **70,994 processed English-language reviews from 19 apps** across Google Play and the Apple App Store. I compared text features and classifiers, and later tested validation-only refinements for neutral sentiment and middle ratings. The final figures reported below come from the separate held-out test set, not those later experiments (see [experiment results](reports/model_improvement_experiments.csv)).
+
 Reviews come from **Google Play and Apple's App Store**, across relevant country storefronts. Only reviews passing the English-language and text-quality checks were retained, regardless of storefront country.
 
 | Measure | Value |
@@ -123,6 +125,9 @@ The pipeline can be run from the repository root:
 
 ```powershell
 python src/collect_reviews.py
+# Inspect data/raw/collection_staging/summary/collection_report.json
+# Then rerun using its cached data and promote when checks pass:
+python src/collect_reviews.py --promote
 python src/preprocessing.py
 python src/train.py
 python src/predict.py
